@@ -29,10 +29,18 @@ PowerShell
 │       └── Export-WiFiPasswords.ps1
 ├── Discovery
 │   └── Local
+│       ├── Get-BIOSInfo.md
+│       ├── Get-BIOSInfo.ps1
 │       ├── Get-FilenameList.md
 │       ├── Get-FilenameList.ps1
+│       ├── Get-InstalledPrograms.md
+│       ├── Get-InstalledPrograms.ps1
 │       ├── Get-StartupItems.md
-│       └── Get-StartupItems.ps1
+│       ├── Get-StartupItems.ps1
+│       ├── Get-USBDevices.md
+│       ├── Get-USBDevices.ps1
+│       ├── Scan-Own-Ports.md
+│       └── Scan-Own-Ports.ps1
 └── Utilities
     └── Misc
         ├── Get-Weather.md
@@ -40,6 +48,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-11 directories, 16 files
+11 directories, 24 files
 ```
 
