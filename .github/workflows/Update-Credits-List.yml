@@ -29,23 +29,28 @@ jobs:
         run: |
           echo "Updating CREDITS.md from commit history..."
 
-          cp CREDITS.md CREDITS.md.bak
+          git fetch --all
+          git log --pretty=format:'%H|%an|%ae|%ad|%s' --date=iso --reverse > commits.log
 
           temp="CREDITS.tmp"
-          echo "" > "$temp"
+          echo "" > $temp
 
-          git log --reverse --date=iso --pretty=format:'%H|%an|%ae|%ad|%s' | while IFS='|' read -r hash name email date msg; do
+          tac commits.log | while IFS='|' read -r hash name email date msg; do
             files=$(git show --pretty="" --name-only "$hash" | head -n 1)
             file_path="/${files:-unknown}"
 
-            # Try GitHub username from noreply emails like username+hash@users.noreply.github.com
-            if [[ "$email" =~ ^([a-zA-Z0-9-]+)(\+.*)?@users\.noreply\.github\.com$ ]]; then
-              username="@${BASH_REMATCH[1]}"
+            # Try GitHub username
+            if [[ "$email" =~ .*noreply.github.com ]]; then
+              username="@${email%%+*}"
+              username=${username#*@}
+              username="@${username}"
+            elif [[ "$email" =~ ^[0-9]+@users.noreply.github.com$ ]]; then
+              username="@${email%%@*}"
             else
               username="@unknown"
             fi
 
-            # Contribution type based on commit message (simple heuristic)
+            # Contribution type based on commit message
             lc_msg=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
             if [[ $lc_msg == *"fix"* ]]; then
               type="Fix"
@@ -61,32 +66,28 @@ jobs:
               type="Code"
             fi
 
-            # Format datetime (ISO 8601 format)
+            # Format datetime
             datetime=$(date -d "$date" '+%Y-%m-%d %H:%M')
 
             echo "| ${name} | ${username} | ${type} | ${file_path} | ${datetime} |" >> "$temp"
           done
 
-          # Insert new entries below the comment marker
-          awk '
-            {
-              print
-            }
-            /<!-- This file is automatically updated by workflow. Additions will appear below. -->/ {
-              while ((getline line < "CREDITS.tmp") > 0) {
-                print line
-              }
-              close("CREDITS.tmp")
-            }
-          ' CREDITS.md.bak > CREDITS.md
-
-          rm "$temp"
+          # Build final CREDITS.md
+          {
+            echo "# Credits"
+            echo ""
+            echo "| Contributor | GitHub Username | Contribution Type | Description/Path | Date Added |"
+            echo "|-------------|----------------|--------------------|------------------|------------|"
+            cat "$temp"
+            echo ""
+            echo "<!-- This file is automatically updated by workflow. Additions will appear below. -->"
+          } > CREDITS.md
 
       - name: Show diff
         run: git diff CREDITS.md || true
 
       - name: Commit and push if not dry-run
-        if: ${{ github.event.inputs.dry_run != 'true' }}
+        if: github.event.inputs.dry_run != 'true'
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
