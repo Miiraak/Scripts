@@ -28,18 +28,24 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+  
       - name: Install GitHub CLI
         run: sudo apt-get install gh
-
+  
       - name: Install PSScriptAnalyzer
         run: pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
-
+  
+      - name: Fetch base branch
+        run: git fetch origin ${{ github.event.pull_request.base.ref }}
+  
       - name: Analyze only modified/added/renamed .ps1 files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FILES=$(git diff --name-status origin/${{ github.base_ref }}...${{ github.head_ref }} | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
+          FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
           if [ -n "$FILES" ]; then
             pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -ReportSummary"
           else
