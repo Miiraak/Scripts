@@ -3,6 +3,8 @@
 [![Update CREDITS.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml/badge.svg?event=workflow_dispatch)](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml)
 [![PowerShell Analysis](https://github.com/Miiraak/Scripts/actions/workflows/PowerShell-Analysis.yml/badge.svg?event=workflow_dispatch)](https://github.com/Miiraak/Scripts/actions/workflows/PowerShell-Analysis.yml)
 
+_We truly appreciate every ⭐ and contributions, thanks for helping this project grow!_
+
 ---
 
 ## Introduction
