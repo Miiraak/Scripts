@@ -21,6 +21,9 @@ PowerShell
 │       ├── Capture-Screen.md
 │       └── Capture-Screen.ps1
 ├── CredentialAccess
+│   ├── LSASS_Dumping
+│   │   ├── User-Credential.md
+│   │   └── User-Credential.ps1
 │   └── WifiCreds
 │       ├── Export-WiFiPasswords.md
 │       └── Export-WiFiPasswords.ps1
@@ -31,6 +34,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-8 directories, 10 files
+9 directories, 12 files
 ```
 
