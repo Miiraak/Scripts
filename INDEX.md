@@ -3,11 +3,12 @@ _This file is update automatically by workflow, any modification made here will 
 
 ## Quick Links
 
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Credits](CREDITS.md)
-- [Index](INDEX.md)
-- [README](README.md)
-- [SECURITY](SECURITY.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md) : How to contribute to the project
+- [CREDITS.md](CREDITS.md) : Authors and contributors
+- [FIXIT.md](FIXIT.md) : Issues detected in PowerShell scripts
+- [INDEX.md](INDEX.md) : Directory and scripts index
+- [README.md](README.md) : General project overview
+- [SECURITY.md](SECURITY.md) : Security rules and advice
 
 ## Script Folder Structure
 
