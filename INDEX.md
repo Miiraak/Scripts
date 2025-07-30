@@ -9,18 +9,3 @@ This repository contains categorized scripts and resources for security, automat
 
 ## Script Folder Structure
 
-```plaintext
-PowerShell/
-├── Collection/
-├── CredentialAccess/
-├── DefenseEvasion/
-├── Discovery/
-├── Execution/
-├── Exfiltration/
-├── Impact/
-├── InitialAccess/
-├── Persistence/
-├── PostExploitation/
-├── PrivilegeEscalation/
-└── Utilities/
-```
