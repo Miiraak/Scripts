@@ -24,62 +24,68 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Extract commits and update CREDITS.md
-        id: update
+      - name: Generate CREDITS.md from Git history
         run: |
-          echo "Updating CREDITS.md from commit history..."
+          echo "Generating CREDITS.md..."
 
           git fetch --all
-          git log --pretty=format:'%H|%an|%ae|%ad|%s' --date=iso --reverse > commits.log
+          git log --pretty=format:'%H|%an|%ae|%ad' --date=iso > commits_full.log
 
-          temp="CREDITS.tmp"
-          echo "" > $temp
+          awk -F'|' '
+          {
+            hash = $1
+            name = $2
+            email = $3
+            date = $4
 
-          tac commits.log | while IFS='|' read -r hash name email date msg; do
-            files=$(git show --pretty="" --name-only "$hash" | head -n 1)
-            file_path="/${files:-unknown}"
+            # Derive username
+            if (email ~ /\+.*@users\.noreply\.github\.com$/) {
+              sub(/\+/, " ", email)
+              split(email, parts, " ")
+              user = "@" parts[2]
+            } else if (email ~ /^[0-9]+@users\.noreply\.github\.com$/) {
+              split(email, parts, "@")
+              user = "@" parts[1]
+            } else {
+              user = "@unknown"
+            }
 
-            # Try GitHub username
-            if [[ "$email" =~ .*noreply.github.com ]]; then
-              username="@${email%%+*}"
-              username=${username#*@}
-              username="@${username}"
-            elif [[ "$email" =~ ^[0-9]+@users.noreply.github.com$ ]]; then
-              username="@${email%%@*}"
-            else
-              username="@unknown"
-            fi
+            key = name "|" user
 
-            # Contribution type based on commit message
-            lc_msg=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
-            if [[ $lc_msg == *"fix"* ]]; then
-              type="Fix"
-            elif [[ $lc_msg == *"doc"* ]]; then
-              type="Docs"
-            elif [[ $lc_msg == *"refactor"* ]]; then
-              type="Refactor"
-            elif [[ $lc_msg == *"add"* || $lc_msg == *"feature"* ]]; then
-              type="Feature"
-            elif [[ $lc_msg == *"remove"* || $lc_msg == *"delete"* ]]; then
-              type="Cleanup"
-            else
-              type="Code"
-            fi
+            count[key]++
+            if (date > last_date[key]) {
+              last_date[key] = date
+              last_hash[key] = hash
+            }
+          }
+          END {
+            PROCINFO["sorted_in"] = "@val_num_desc"
+            for (k in count) {
+              split(k, parts, "|")
+              name = parts[1]
+              user = parts[2]
+              hash = last_hash[k]
+              date = substr(last_date[k], 1, 16)
 
-            # Format datetime
-            datetime=$(date -d "$date" '+%Y-%m-%d %H:%M')
+              # Get last file for this user
+              cmd = "git show --pretty=format: --name-only " hash " | head -n 1"
+              cmd | getline file
+              close(cmd)
 
-            echo "| ${name} | ${username} | ${type} | ${file_path} | ${datetime} |" >> "$temp"
-          done
+              if (file == "") file = "/unknown"
+              else file = "/" file
 
-          # Build final CREDITS.md
-          sed -i '/./!d' "$temp"
+              gsub("|", "\\|", name)
+              printf("| %s | %s | %s | %d | %s |\n", name, user, date, count[k], file)
+            }
+          }' > CREDITS.tmp
+
           {
             echo "# Credits"
             echo ""
-            echo "| Contributor | GitHub Username | Contribution Type | Description/Path | Date Added |"
-            echo "|-------------|----------------|--------------------|------------------|------------|"
-            cat "$temp"
+            echo "| Contributor | Profile | Last Commit Date | Total Commits | Last Description/Path |"
+            echo "|-------------|---------|------------------|----------------|-------------------------|"
+            cat CREDITS.tmp
             echo ""
             echo "<!-- This file is automatically updated by workflow. Additions will appear below. -->"
           } > CREDITS.md
