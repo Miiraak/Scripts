@@ -70,6 +70,7 @@ jobs:
           else
             git add INDEX.md
             git commit -m "Automated update of INDEX.md"
+            git pull --rebase origin master
             git push
           fi
         env:
