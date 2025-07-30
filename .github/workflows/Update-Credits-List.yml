@@ -3,9 +3,9 @@ name: Update Credits List
 on:
   pull_request:
     types: [closed]
-    branches: [master] # Change to 'main' if needed
+    branches: [master] # Remplace par 'main' si ta branche principale est main
   schedule:
-    - cron: '0 8 * * *'
+    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
   workflow_dispatch:
     inputs:
       dry_run:
@@ -103,7 +103,10 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+          git add CREDITS.md
+          git stash --include-untracked
           git pull --rebase
+          git stash pop || true
 
           if git diff --quiet; then
             echo "No changes to commit."
