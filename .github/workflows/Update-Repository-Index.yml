@@ -40,11 +40,12 @@ jobs:
             echo
             echo "## Quick Links"
             echo
-            echo "- [Contributing Guidelines](CONTRIBUTING.md)"
-            echo "- [Credits](CREDITS.md)"
-            echo "- [Index](INDEX.md)"
-            echo "- [README](README.md)"
-            echo "- [SECURITY](SECURITY.md)"
+            echo "- [CONTRIBUTING.md](CONTRIBUTING.md)" : How to contribute to the project
+            echo "- [CREDITS.md](CREDITS.md)" : Authors and contributors
+            echo "- [FIXIT.md](FIXIT.md)" : Issues detected in PowerShell scripts
+            echo "- [INDEX.md](INDEX.md)" : Directory and scripts index
+            echo "- [README.md](README.md)" : General project overview
+            echo "- [SECURITY.md](SECURITY.md)" : Security rules and advice
             echo
             echo "## Script Folder Structure"
             echo
