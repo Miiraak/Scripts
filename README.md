@@ -1,4 +1,6 @@
-# Scripts
+# Scripts 
+![Last update of INDEX.md](https://img.shields.io/github/last-commit/Miiraak/Scripts?filename=INDEX.md&label=Last%20INDEX.md%20Update&color=blue&style=flat-square)
+
 ---
 
 ## Introduction
