@@ -48,18 +48,34 @@ jobs:
           FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
           if [ -n "$FILES" ]; then
             pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
-            # Format JSON as markdown table or code block (simple version below)
-            echo '## PSScriptAnalyzer Results' > psa_result.md
-            if [ -s psa_result.json ]; then
-              echo '\n```json' >> psa_result.md
-              cat psa_result.json >> psa_result.md
-              echo '```' >> psa_result.md
-            else
-              echo 'No issues detected.' >> psa_result.md
-            fi
+
+            # Format PSA results as a markdown table (with PowerShell)
+            pwsh -Command "
+              \$results = Get-Content psa_result.json | ConvertFrom-Json
+              \$md = @()
+              \$md += '## PSScriptAnalyzer Results'
+              \$md += ''
+              if (\$results.Count -eq 0) {
+                \$md += 'No issues detected.'
+              } else {
+                \$md += '| File | Line | Rule | Severity | Message |'
+                \$md += '| ---- | ---- | ---- | -------- | ------- |'
+                foreach (\$item in \$results) {
+                  \$file = if (\$item.ScriptName) { \$item.ScriptName } else { '' }
+                  \$line = if (\$item.Line) { \$item.Line } else { '' }
+                  \$rule = if (\$item.RuleName) { \$item.RuleName } else { '' }
+                  \$severity = switch (\$item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { \$item.Severity } }
+                  \$msg = (\$item.Message -replace '\|','\\|') -replace '\r?\n',' '
+                  # Limit message length for table readability
+                  if (\$msg.Length -gt 120) { \$msg = \$msg.Substring(0,117) + '...' }
+                  \$md += \"| \$file | \$line | \$rule | \$severity | \$msg |\"
+                }
+              }
+              Set-Content -Path psa_result.md -Value (\$md -join \"`n\")
+            "
+
             # Comment the results on the PR
-            gh pr comment ${{ github.event.pull_request.number }} \
-              --body-file psa_result.md
+            gh pr comment ${{ github.event.pull_request.number }} --body-file psa_result.md
           else
             echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
           fi
