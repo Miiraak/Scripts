@@ -13,6 +13,10 @@ This repository contains categorized scripts and resources for security, automat
 
 ```plaintext
 PowerShell
+├── Collection
+│   └── Keylogging
+│       ├── Invoke-Keylogger.md
+│       └── Invoke-Keylogger.ps1
 └── Utilities
     └── Misc
         ├── Get-Weather.md
@@ -20,6 +24,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-3 directories, 4 files
+5 directories, 6 files
 ```
 
