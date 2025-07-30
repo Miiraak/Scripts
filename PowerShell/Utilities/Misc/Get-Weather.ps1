@@ -11,7 +11,7 @@
 #                       ░    ░   ░     ░           ░  ░     ░  ░░  ░                   |
 #                                                                                      |
 #     Title        : Get-Weather.ps1                                                   |
-#     Link         : https://github.com/miiraak/scripts/powershell/utilities/misc/     |
+#     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/Utilities/Misc/     |
 #     Version      : 1.0                                                               |
 #     Category     : utilities/misc                                                    |
 #     Target       : Windows 10/11                                                     |

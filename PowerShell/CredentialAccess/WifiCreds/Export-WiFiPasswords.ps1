@@ -11,7 +11,7 @@
 #                         ░    ░   ░     ░           ░  ░     ░  ░░  ░                            |
 #                                                                                                 |
 #     Title        : Export-WiFiPasswords.ps1                                                     |
-#     Link         : https://github.com/miiraak/Scripts/PowerShell/credentialaccess/wificreds/    |
+#     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/Collection/Keylogging    |
 #     Version      : 1.5                                                                          |
 #     Category     : credentialaccess/wificreds                                                   |
 #     Target       : Windows 10/11                                                                |
