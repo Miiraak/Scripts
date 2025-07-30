@@ -1,0 +1,55 @@
+name: Analyse PowerShell
+
+on:
+  schedule:
+    - cron: '0 8 * * *'           # Tous les jours à 8h UTC
+  workflow_dispatch:               # Lancement manuel
+  pull_request:
+    paths:
+      - '**/*.ps1'                 # PR sur fichiers .ps1
+
+jobs:
+  scan-all:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: actions/setup-powershell@v2
+
+      - name: Install PSScriptAnalyzer
+        run: pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
+
+      - name: Analyse tous les scripts .ps1
+        run: pwsh -Command "Invoke-ScriptAnalyzer -Path . -Recurse -ReportSummary"
+
+  scan-pr:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        uses: actions/setup-powershell@v2
+
+      - name: Install PSScriptAnalyzer
+        run: pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
+
+      - name: Analyse uniquement les fichiers .ps1 modifiés/ajoutés
+        env:
+          GITHUB_TOKEN: ${{ secrets.AWSR }}
+        run: |
+          # Liste les fichiers .ps1 ajoutés ou modifiés dans la PR
+          FILES=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' || true)
+          if [ -n "$FILES" ]; then
+            pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -ReportSummary"
+          else
+            echo "Aucun script PowerShell (.ps1) modifié ou ajouté dans cette PR."
+          fi
+        shell: bash
+        # Installe l'outil GitHub CLI pour la commande gh
+      - name: Install GitHub CLI
+        run: sudo apt-get install gh
