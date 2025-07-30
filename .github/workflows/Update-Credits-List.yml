@@ -18,16 +18,18 @@ on:
 jobs:
   update_credits:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Important pour récupérer tous les commits
+          fetch-depth: 0
 
       - name: Build new CREDITS.md content
         id: build
+        shell: bash
         run: |
+          #!/usr/bin/env bash
+
           echo "Collecting commit data..."
 
           git fetch --all
@@ -64,7 +66,6 @@ jobs:
 
           done < commits_full.log
 
-          # Prepare table rows
           temp="CREDITS.tmp"
           echo "" > "$temp"
 
@@ -81,10 +82,8 @@ jobs:
             echo "| $name | $username | $date_fmt | $total | $file |" >> "$temp"
           done
 
-          # Sort by latest date (descending)
           sort -r -k3 "$temp" > "$temp.sorted"
 
-          # Write final CREDITS.md
           {
             echo "# Credits"
             echo ""
