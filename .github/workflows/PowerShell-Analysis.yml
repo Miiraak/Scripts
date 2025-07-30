@@ -76,11 +76,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
+          FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$')
           if [ -n "$FILES" ]; then
-            # Quote and comma-separate files for PowerShell array
-            PS_ARRAY=$(printf "'%s'," $FILES | sed 's/,$//')
-            pwsh -Command "Invoke-ScriptAnalyzer -Path @($PS_ARRAY) -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
+            # Write the PowerShell script that takes an array of files
+            printf "%s\n" \
+            "param([string[]]\$Files)" \
+            "\$results = Invoke-ScriptAnalyzer -Path \$Files -Recurse | ConvertTo-Json -Depth 5" \
+            "Set-Content -Path psa_result.json -Value \$results" > run_psa.ps1
+
+            pwsh -File run_psa.ps1 $FILES
 
             printf "%s\n" \
             "\$results = Get-Content psa_result.json | ConvertFrom-Json" \
