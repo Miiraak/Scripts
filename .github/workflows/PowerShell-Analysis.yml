@@ -52,6 +52,67 @@ jobs:
           cat psa_result.md
           echo '============================================='
 
+      - name: Generate FIXIT.md from analysis results
+        shell: pwsh
+        run: |
+          $results = Get-Content psa_result.json | ConvertFrom-Json
+          $categories = @{"Error"=@(); "Warning"=@(); "Info"=@()}
+          foreach ($item in $results) {
+            $sev = switch ($item.Severity) {
+              0 {'Info'}
+              1 {'Warning'}
+              2 {'Error'}
+              default {$item.Severity}
+            }
+            $cat = $categories[$sev]
+            $cat += $item
+            $categories[$sev] = $cat
+          }
+
+          function Format-Table ($items, $title) {
+            if ($items.Count -eq 0) { return "`n### $title`n\n_No issues found under this category._`n" }
+            $sorted = $items | Sort-Object ScriptName, Line
+            $table = @()
+            $table += "`n### $title`n"
+            $table += "| File | Line | Rule | Message |"
+            $table += "| ---- | ---- | ---- | ------- |"
+            foreach ($item in $sorted) {
+              $file = $item.ScriptName
+              $line = $item.Line
+              $rule = $item.RuleName
+              $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+              if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+              $table += "| $file | $line | $rule | $msg |"
+            }
+            return $table -join "`n"
+          }
+
+          $fixit = @()
+          $fixit += "# PowerShell Script Issues Report"
+          $fixit += "_This file is generated automatically by PowerShell Analysis workflow_"
+          $fixit += ""
+
+          $fixit += Format-Table $categories['Error'] "Errors"
+          $fixit += Format-Table $categories['Warning'] "Warnings"
+          $fixit += Format-Table $categories['Info'] "Info"
+
+          Set-Content -Path FIXIT.md -Value ($fixit -join "`n")
+
+      - name: Commit and push FIXIT.md if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          if git diff --quiet FIXIT.md; then
+            echo "No changes to FIXIT.md."
+          else
+            git add FIXIT.md
+            git commit -m "Update FIXIT.md from scheduled/dispatch PSScriptAnalyzer scan"
+            git pull --rebase origin master
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   scan-pr:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -78,7 +139,6 @@ jobs:
         run: |
           FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$')
           if [ -n "$FILES" ]; then
-            # Write the PowerShell script that takes an array of files
             printf "%s\n" \
             "param([string[]]\$Files)" \
             "\$results = Invoke-ScriptAnalyzer -Path \$Files -Recurse | ConvertTo-Json -Depth 5" \
@@ -113,4 +173,3 @@ jobs:
             gh pr comment ${{ github.event.pull_request.number }} --body-file psa_result.md
           else
             echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
-          fi
