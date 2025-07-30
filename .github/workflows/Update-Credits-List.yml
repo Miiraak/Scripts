@@ -3,9 +3,9 @@ name: Update Credits List
 on:
   pull_request:
     types: [closed]
-    branches: [master] # Change to 'main' if your default branch is 'main'
+    branches: [master] # Change to 'main' if needed
   schedule:
-    - cron: '0 8 * * *' # Every day at 8h UTC
+    - cron: '0 8 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -69,7 +69,7 @@ jobs:
             date="${last_date[$key]}"
             hash="${last_hash[$key]}"
             total="${commit_count[$key]}"
-            file=$(git show --quiet --pretty=format: --name-only "$hash" | head -n 1)
+            file=$(git show --pretty=format: --name-only "$hash" | head -n 1)
             [[ -z "$file" ]] && file="/unknown" || file="/$file"
 
             # Cross-platform date formatting
