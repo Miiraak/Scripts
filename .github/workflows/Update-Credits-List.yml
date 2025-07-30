@@ -1,0 +1,100 @@
+name: Update Credits List
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+  schedule:
+    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
+
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (no commit)'
+        required: false
+        default: 'false'
+
+jobs:
+  update_credits:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract commits and update Credits.md
+        id: update
+        run: |
+          echo "Updating Credits.md from commit history..."
+
+          cp Credits.md Credits.md.bak
+
+          temp="credits.tmp"
+          echo "" > $temp
+
+          git log --reverse --pretty=format:'%H|%an|%ae|%ad|%s' | while IFS='|' read -r hash name email date msg; do
+            files=$(git show --pretty="" --name-only "$hash" | head -n 1)
+            file_path="/${files:-unknown}"
+
+            # Try GitHub username
+            if [[ "$email" =~ .*noreply.github.com ]]; then
+              username="@${email%%+*}"
+              username=${username#*@}
+              username="@${username}"
+            else
+              username="@unknown"
+            fi
+
+            # Contribution type based on commit message (simple heuristic)
+            lc_msg=$(echo "$msg" | tr '[:upper:]' '[:lower:]')
+            if [[ $lc_msg == *"fix"* ]]; then
+              type="Fix"
+            elif [[ $lc_msg == *"doc"* ]]; then
+              type="Docs"
+            elif [[ $lc_msg == *"refactor"* ]]; then
+              type="Refactor"
+            elif [[ $lc_msg == *"add"* || $lc_msg == *"feature"* ]]; then
+              type="Feature"
+            elif [[ $lc_msg == *"remove"* || $lc_msg == *"delete"* ]]; then
+              type="Cleanup"
+            else
+              type="Code"
+            fi
+
+            # Format datetime
+            datetime=$(date -d "$date" '+%Y-%m-%d %H:%M')
+
+            # Append to temp file
+            echo "| ${name} | ${username} | ${type} | ${file_path} | ${datetime} |" >> $temp
+          done
+
+          # Insert below the comment marker
+          awk -v new_entries="$(cat $temp)" '
+            1
+            /<!-- This file is automatically updated by workflow. Additions will appear below. -->/ {
+              print new_entries
+              exit
+            }
+          ' Credits.md.bak > Credits.md
+
+          rm $temp
+
+      - name: Show diff
+        run: git diff Credits.md || true
+
+      - name: Commit and push if not dry-run
+        if: github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit."
+          else
+            git add Credits.md
+            git commit -m "Automated update of Credits.md"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.AWSR }}
