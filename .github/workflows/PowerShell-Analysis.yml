@@ -19,8 +19,39 @@ jobs:
       - name: Install PSScriptAnalyzer
         run: pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
 
-      - name: Analyze all .ps1 scripts
-        run: pwsh -Command "Invoke-ScriptAnalyzer -Path . -Recurse -ReportSummary"
+      - name: Analyze all .ps1 scripts and format output
+        shell: bash
+        run: |
+          pwsh -Command "Invoke-ScriptAnalyzer -Path . -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
+
+          cat << 'EOF' > format_psa.ps1
+          $results = Get-Content psa_result.json | ConvertFrom-Json
+          $md = @()
+          $md += '## PSScriptAnalyzer Results'
+          $md += ''
+          if ($results.Count -eq 0) {
+            $md += 'No issues detected.'
+          } else {
+            $md += '| File | Line | Rule | Severity | Message |'
+            $md += '| ---- | ---- | ---- | -------- | ------- |'
+            foreach ($item in $results) {
+              $file = if ($item.ScriptName) { $item.ScriptName } else { '' }
+              $line = if ($item.Line) { $item.Line } else { '' }
+              $rule = if ($item.RuleName) { $item.RuleName } else { '' }
+              $severity = switch ($item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $item.Severity } }
+              $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+              if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+              $md += "| $file | $line | $rule | $severity | $msg |"
+            }
+          }
+          Set-Content -Path psa_result.md -Value ($md -join "`n")
+          EOF
+
+          pwsh -File format_psa.ps1
+
+          echo "====== PSScriptAnalyzer Markdown Output ======"
+          cat psa_result.md
+          echo "============================================="
 
   scan-pr:
     if: github.event_name == 'pull_request'
@@ -51,31 +82,31 @@ jobs:
             pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
 
             cat << 'EOF' > format_psa.ps1
-            $results = Get-Content psa_result.json | ConvertFrom-Json
-            $md = @()
-            $md += '## PSScriptAnalyzer Results'
-            $md += ''
-            if ($results.Count -eq 0) {
-              $md += 'No issues detected.'
-            } else {
-              $md += '| File | Line | Rule | Severity | Message |'
-              $md += '| ---- | ---- | ---- | -------- | ------- |'
-              foreach ($item in $results) {
-                $file = if ($item.ScriptName) { $item.ScriptName } else { '' }
-                $line = if ($item.Line) { $item.Line } else { '' }
-                $rule = if ($item.RuleName) { $item.RuleName } else { '' }
-                $severity = switch ($item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $item.Severity } }
-                $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
-                if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
-                $md += "| $file | $line | $rule | $severity | $msg |"
-              }
-            }
-            Set-Content -Path psa_result.md -Value ($md -join "`n")
-            EOF
-            
-                        pwsh -File format_psa.ps1
-            
-                        gh pr comment ${{ github.event.pull_request.number }} --body-file psa_result.md
-                      else
-                        echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
-                      fi
+$results = Get-Content psa_result.json | ConvertFrom-Json
+$md = @()
+$md += '## PSScriptAnalyzer Results'
+$md += ''
+if ($results.Count -eq 0) {
+  $md += 'No issues detected.'
+} else {
+  $md += '| File | Line | Rule | Severity | Message |'
+  $md += '| ---- | ---- | ---- | -------- | ------- |'
+  foreach ($item in $results) {
+    $file = if ($item.ScriptName) { $item.ScriptName } else { '' }
+    $line = if ($item.Line) { $item.Line } else { '' }
+    $rule = if ($item.RuleName) { $item.RuleName } else { '' }
+    $severity = switch ($item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $item.Severity } }
+    $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+    if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+    $md += "| $file | $line | $rule | $severity | $msg |"
+  }
+}
+Set-Content -Path psa_result.md -Value ($md -join "`n")
+EOF
+
+            pwsh -File format_psa.ps1
+
+            gh pr comment ${{ github.event.pull_request.number }} --body-file psa_result.md
+          else
+            echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
+          fi
