@@ -78,7 +78,9 @@ jobs:
         run: |
           FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
           if [ -n "$FILES" ]; then
-            pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
+            # Quote and comma-separate files for PowerShell array
+            PS_ARRAY=$(printf "'%s'," $FILES | sed 's/,$//')
+            pwsh -Command "Invoke-ScriptAnalyzer -Path @($PS_ARRAY) -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
 
             printf "%s\n" \
             "\$results = Get-Content psa_result.json | ConvertFrom-Json" \
