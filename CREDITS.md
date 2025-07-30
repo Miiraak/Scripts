@@ -3,8 +3,6 @@
 | Contributor | GitHub Username | Contribution Type | Description/Path | Date Added |
 |-------------|----------------|------------------|------------------|------------|
 | Miiraak     | @Miiraak       | Owner            | All              | 2025-01-01 |
-<!-- This file is automatically updated by workflow. Additions will appear below. -->
-
 | Miiraak | @unknown | Code | /.gitattributes | 2025-07-29 21:45 |
 | Miiraak | @unknown | Code | /Licences/BIND9/CODE_OF_CONDUCT.md | 2025-07-29 21:45 |
 | Old Character | @167513064 | Code | /README.md | 2025-07-30 08:06 |
