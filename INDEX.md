@@ -5,8 +5,7 @@ This repository contains categorized scripts and resources for security, automat
 ## Quick Links
 
 - [Contributing Guidelines](CONTRIBUTING.md)
-- [Credits](Credits.md)
-- [Folder Structure](#folder-structure)
+- [Credits](CREDITS.md)
 
 ## Script Folder Structure
 
