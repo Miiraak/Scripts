@@ -23,7 +23,6 @@
 | EndPort   | int  | 1024    | Last port in the scan range          |
 
 ## Usage
-
 ### Basic Example
 ```powershell
 .\Scan-Own-Ports.ps1
