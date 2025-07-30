@@ -16,7 +16,7 @@ All contributions are welcome—whether submitting scripts, documentation, impro
 ## Contribution Standards
 
 - **Scripts**  
-  - Must include a header with metadata.
+  - Must include a header with metadata:
     - Title
     - Link
     - Author
@@ -38,9 +38,20 @@ All contributions are welcome—whether submitting scripts, documentation, impro
   - Must work locally or in a controlled environment.
   - Concepts described must function or be clearly staged.
 
+## Transparency & Security
+
+- **Transparency:**  
+  Scripts must not attempt to harm the direct user in an obfuscated or misleading fashion or in any ways.  
+  If a script is inherently dangerous (e.g., deletes system files), its purpose must be clear and documented.  
+  Misuse of such scripts is a user error, not a repository vulnerability.
+- **Intent:**  
+  Scripts must **never** be designed to target or harm any specific person (physical or legal entity), nor to harm the user in an undisclosed or hidden way.
+- **Privacy:**  
+  Do not disclose private, sensitive, or confidential information in public issues or pull requests. If you discover such a problem, contact the repository owner privately.
+
 ## Recognition & Credits
 
-- All contributors are listed in `CREDITS.md`.
+- All contributors are listed in [`CREDITS.md`](https://github.com/Miiraak/Scripts/tree/master/CREDITS.md).
 
 ## Inclusivity
 
