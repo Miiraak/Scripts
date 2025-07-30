@@ -49,16 +49,24 @@ PowerShell
 │       ├── Logoff-IdleSessions.md
 │       └── Logoff-IdleSessions.ps1
 ├── PrivilegeEscalation
-│   └── TokenManipulation
-│       ├── Invoke-TokenManipulation.md
-│       └── Invoke-TokenManipulation.ps1
+│   ├── TokenManipulation
+│   │   ├── Invoke-TokenManipulation.md
+│   │   └── Invoke-TokenManipulation.ps1
+│   └── UACBypass
+│       ├── Invoke-BypassUAC.md
+│       └── Invoke-BypassUAC.ps1
 └── Utilities
+    ├── Logging
+    │   ├── Get-BatteryStatus.md
+    │   ├── Get-BatteryStatus.ps1
+    │   ├── Monitor-CPUUsage.md
+    │   └── Monitor-CPUUsage.ps1
     └── Misc
         ├── Get-Weather.md
         ├── Get-Weather.ps1
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-14 directories, 32 files
+16 directories, 38 files
 ```
 
