@@ -32,3 +32,5 @@
 
 # ---------------[EXECUTION]--------------- #
 rundll32.exe user32.dll,LockWorkStation
+# ---------------[END]--------------- #
+exit 0
