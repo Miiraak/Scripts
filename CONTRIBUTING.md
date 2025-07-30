@@ -41,17 +41,17 @@ All contributions are welcome—whether submitting scripts, documentation, impro
 ## Transparency & Security
 
 - **Transparency:**  
-  Scripts must not attempt to harm the direct user in an obfuscated or misleading fashion or in any ways.  
+  Scripts must not attempt to harm the repository user in an obfuscated or misleading fashion nor in any ways.  
   If a script is inherently dangerous (e.g., deletes system files), its purpose must be clear and documented.  
   Misuse of such scripts is a user error, not a repository vulnerability.
 - **Intent:**  
-  Scripts must **never** be designed to target or harm any specific person (physical or legal entity), nor to harm the user in an undisclosed or hidden way.
+  Scripts must **never** be designed to target or harm any specific person (physical or legal entity), nor to harm the repository user in an undisclosed or hidden way.
 - **Privacy:**  
   Do not disclose private, sensitive, or confidential information in public issues or pull requests. If you discover such a problem, contact the repository owner privately.
 
 ## Recognition & Credits
 
-- All contributors are listed in [`CREDITS.md`](https://github.com/Miiraak/Scripts/tree/master/CREDITS.md).
+- All contributors are listed in [`CREDITS.md`](./CREDITS.md).
 
 ## Inclusivity
 
