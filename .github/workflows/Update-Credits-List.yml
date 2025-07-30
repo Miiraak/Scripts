@@ -68,11 +68,15 @@ jobs:
           done
 
           # Insert new entries below the comment marker
-          awk -v new_entries="$(cat "$temp")" '
-            1
+          awk '
+            {
+              print
+            }
             /<!-- This file is automatically updated by workflow. Additions will appear below. -->/ {
-              print new_entries
-              exit
+              while ((getline line < "CREDITS.tmp") > 0) {
+                print line
+              }
+              close("CREDITS.tmp")
             }
           ' CREDITS.md.bak > CREDITS.md
 
