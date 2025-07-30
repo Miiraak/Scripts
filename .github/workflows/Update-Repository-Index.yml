@@ -35,6 +35,7 @@ jobs:
 
           {
             echo "# Repository Index"
+            echo "_This file is update automatically by workflow, any modification made here will be erased_"
             echo
             echo "This repository contains categorized scripts and resources for security, automation, and learning."
             echo
