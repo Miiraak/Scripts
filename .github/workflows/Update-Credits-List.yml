@@ -32,17 +32,15 @@ jobs:
           cp CREDITS.md CREDITS.md.bak
 
           temp="CREDITS.tmp"
-          echo "" > $temp
+          echo "" > "$temp"
 
-          git log --reverse --pretty=format:'%H|%an|%ae|%ad|%s' | while IFS='|' read -r hash name email date msg; do
+          git log --reverse --date=iso --pretty=format:'%H|%an|%ae|%ad|%s' | while IFS='|' read -r hash name email date msg; do
             files=$(git show --pretty="" --name-only "$hash" | head -n 1)
             file_path="/${files:-unknown}"
 
-            # Try GitHub username
-            if [[ "$email" =~ .*noreply.github.com ]]; then
-              username="@${email%%+*}"
-              username=${username#*@}
-              username="@${username}"
+            # Try GitHub username from noreply emails like username+hash@users.noreply.github.com
+            if [[ "$email" =~ ^([a-zA-Z0-9-]+)(\+.*)?@users\.noreply\.github\.com$ ]]; then
+              username="@${BASH_REMATCH[1]}"
             else
               username="@unknown"
             fi
@@ -63,15 +61,14 @@ jobs:
               type="Code"
             fi
 
-            # Format datetime
+            # Format datetime (ISO 8601 format)
             datetime=$(date -d "$date" '+%Y-%m-%d %H:%M')
 
-            # Append to temp file
-            echo "| ${name} | ${username} | ${type} | ${file_path} | ${datetime} |" >> $temp
+            echo "| ${name} | ${username} | ${type} | ${file_path} | ${datetime} |" >> "$temp"
           done
 
-          # Insert below the comment marker
-          awk -v new_entries="$(cat $temp)" '
+          # Insert new entries below the comment marker
+          awk -v new_entries="$(cat "$temp")" '
             1
             /<!-- This file is automatically updated by workflow. Additions will appear below. -->/ {
               print new_entries
@@ -79,13 +76,13 @@ jobs:
             }
           ' CREDITS.md.bak > CREDITS.md
 
-          rm $temp
+          rm "$temp"
 
       - name: Show diff
         run: git diff CREDITS.md || true
 
       - name: Commit and push if not dry-run
-        if: github.event.inputs.dry_run != 'true'
+        if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
