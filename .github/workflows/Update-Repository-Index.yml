@@ -24,6 +24,7 @@ jobs:
       - name: Generate INDEX.md
         run: |
           DEFAULT_LANGUAGES=("PowerShell" "Bash" "CSharp" "C")
+          EXTRA_FOLDERS=("Licences" "Tools")
 
           if [ -z "${{ github.event.inputs.languages }}" ]; then
             LANGUAGES=("${DEFAULT_LANGUAGES[@]}")
@@ -59,6 +60,20 @@ jobs:
               echo >> "$INDEX_FILE"
             else
               echo "Skipping ${lang}: folder does not exist."
+            fi
+          done
+
+          # Ajout des dossiers Licences et Tools
+          for ext in "${EXTRA_FOLDERS[@]}"; do
+            if [ -d "$ext" ]; then
+              echo "### ${ext}" >> "$INDEX_FILE"
+              echo >> "$INDEX_FILE"
+              echo '```plaintext' >> "$INDEX_FILE"
+              tree -a -I '.git|node_modules|__pycache__' "$ext" >> "$INDEX_FILE"
+              echo '```' >> "$INDEX_FILE"
+              echo >> "$INDEX_FILE"
+            else
+              echo "Skipping ${ext}: folder does not exist."
             fi
           done
 
