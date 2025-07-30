@@ -73,6 +73,7 @@ jobs:
           done
 
           # Build final CREDITS.md
+          sed -i '/./!d' "$temp"
           {
             echo "# Credits"
             echo ""
