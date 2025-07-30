@@ -1,12 +1,13 @@
 # Repository Index
 _This file is update automatically by workflow, any modification made here will be erased_
 
-This repository contains categorized scripts and resources for security, automation, and learning.
-
 ## Quick Links
 
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Credits](CREDITS.md)
+- [Index](INDEX.md)
+- [README](README.md)
+- [SECURITY](SECURITY.md)
 
 ## Script Folder Structure
 
