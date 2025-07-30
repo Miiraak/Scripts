@@ -1,6 +1,7 @@
 # Scripts 
-![Update INDEX.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Credits-List.yml/badge.svg) 
-![Update CREDITS.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml/badge.svg)
+[![Update INDEX.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Credits-List.yml/badge.svg?event=workflow_dispatch)](https://github.com/Miiraak/Scripts/actions/workflows/Update-Credits-List.yml)
+[![Update CREDITS.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml/badge.svg?event=workflow_dispatch)](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml)
+[![PowerShell Analysis](https://github.com/Miiraak/Scripts/actions/workflows/PowerShell-Analysis.yml/badge.svg?event=workflow_dispatch)](https://github.com/Miiraak/Scripts/actions/workflows/PowerShell-Analysis.yml)
 
 ---
 
