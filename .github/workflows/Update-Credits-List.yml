@@ -18,74 +18,79 @@ on:
 jobs:
   update_credits:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Important pour récupérer tous les commits
 
-      - name: Generate CREDITS.md from Git history
+      - name: Build new CREDITS.md content
+        id: build
         run: |
-          echo "Generating CREDITS.md..."
+          echo "Collecting commit data..."
 
           git fetch --all
-          git log --pretty=format:'%H|%an|%ae|%ad' --date=iso > commits_full.log
+          git log --pretty=format:'%H|%an|%ae|%ad' --date=iso --reverse > commits_full.log
 
-          awk -F'|' '
-          {
-            hash = $1
-            name = $2
-            email = $3
-            date = $4
+          declare -A commit_count
+          declare -A last_date
+          declare -A last_hash
 
-            # Derive username
-            if (email ~ /\+.*@users\.noreply\.github\.com$/) {
-              sub(/\+/, " ", email)
-              split(email, parts, " ")
-              user = "@" parts[2]
-            } else if (email ~ /^[0-9]+@users\.noreply\.github\.com$/) {
-              split(email, parts, "@")
-              user = "@" parts[1]
-            } else {
-              user = "@unknown"
-            }
+          while IFS='|' read -r hash name email date; do
+            if [[ -z "$name" || -z "$email" || -z "$date" ]]; then
+              continue
+            fi
 
-            key = name "|" user
+            # Determine GitHub profile
+            if [[ "$email" =~ \+.*@users\.noreply\.github\.com$ ]]; then
+              username="@${email%%+*}"
+              username=${username#*@}
+              username="@${username}"
+            elif [[ "$email" =~ ^[0-9]+@users\.noreply\.github\.com$ ]]; then
+              username="@${email%%@*}"
+            else
+              username="@unknown"
+            fi
 
-            count[key]++
-            if (date > last_date[key]) {
-              last_date[key] = date
-              last_hash[key] = hash
-            }
-          }
-          END {
-            PROCINFO["sorted_in"] = "@val_num_desc"
-            for (k in count) {
-              split(k, parts, "|")
-              name = parts[1]
-              user = parts[2]
-              hash = last_hash[k]
-              date = substr(last_date[k], 1, 16)
+            key="$name|$username"
+            ((commit_count["$key"]++))
 
-              # Get last file for this user
-              cmd = "git show --pretty=format: --name-only " hash " | head -n 1"
-              cmd | getline file
-              close(cmd)
+            # Keep latest date and hash
+            if [[ -z "${last_date["$key"]}" || "$date" > "${last_date["$key"]}" ]]; then
+              last_date["$key"]="$date"
+              last_hash["$key"]="$hash"
+            fi
 
-              if (file == "") file = "/unknown"
-              else file = "/" file
+          done < commits_full.log
 
-              gsub("|", "\\|", name)
-              printf("| %s | %s | %s | %d | %s |\n", name, user, date, count[k], file)
-            }
-          }' > CREDITS.tmp
+          # Prepare table rows
+          temp="CREDITS.tmp"
+          echo "" > "$temp"
 
+          for key in "${!commit_count[@]}"; do
+            IFS='|' read -r name username <<< "$key"
+            date="${last_date[$key]}"
+            hash="${last_hash[$key]}"
+            total="${commit_count[$key]}"
+            file=$(git show --quiet --pretty=format: --name-only "$hash" | head -n 1)
+            [[ -z "$file" ]] && file="/unknown" || file="/$file"
+
+            date_fmt=$(date -d "$date" +"%Y-%m-%d %H:%M")
+
+            echo "| $name | $username | $date_fmt | $total | $file |" >> "$temp"
+          done
+
+          # Sort by latest date (descending)
+          sort -r -k3 "$temp" > "$temp.sorted"
+
+          # Write final CREDITS.md
           {
             echo "# Credits"
             echo ""
             echo "| Contributor | Profile | Last Commit Date | Total Commits | Last Description/Path |"
             echo "|-------------|---------|------------------|----------------|-------------------------|"
-            cat CREDITS.tmp
+            cat "$temp.sorted"
             echo ""
             echo "<!-- This file is automatically updated by workflow. Additions will appear below. -->"
           } > CREDITS.md
