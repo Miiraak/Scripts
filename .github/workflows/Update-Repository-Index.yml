@@ -1,0 +1,76 @@
+name: Update Repository Index
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      languages:
+        description: 'Languages to index (comma-separated: PowerShell,Bash,CSharp,C). Leave empty for all.'
+        required: false
+
+jobs:
+  generate_index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install tree utility
+        run: sudo apt-get update && sudo apt-get install -y tree
+
+      - name: Generate INDEX.md
+        run: |
+          DEFAULT_LANGUAGES=("PowerShell" "Bash" "CSharp" "C")
+
+          if [ -z "${{ github.event.inputs.languages }}" ]; then
+            LANGUAGES=("${DEFAULT_LANGUAGES[@]}")
+          else
+            IFS=',' read -ra LANGUAGES <<< "${{ github.event.inputs.languages }}"
+          fi
+
+          INDEX_FILE="INDEX.md"
+
+          {
+            echo "# Repository Index"
+            echo
+            echo "This repository contains categorized scripts and resources for security, automation, and learning."
+            echo
+            echo "## Quick Links"
+            echo
+            echo "- [Contributing Guidelines](CONTRIBUTING.md)"
+            echo "- [Credits](CREDITS.md)"
+            echo
+            echo "## Script Folder Structure"
+            echo
+          } > "$INDEX_FILE"
+
+          for lang in "${LANGUAGES[@]}"; do
+            if [ -d "$lang" ]; then
+              echo "### ${lang}" >> "$INDEX_FILE"
+              echo >> "$INDEX_FILE"
+              echo '```plaintext' >> "$INDEX_FILE"
+              tree -a -I '.git|node_modules|__pycache__' "$lang" >> "$INDEX_FILE"
+              echo '```' >> "$INDEX_FILE"
+              echo >> "$INDEX_FILE"
+            else
+              echo "Skipping ${lang}: folder does not exist."
+            fi
+          done
+
+      - name: Commit and push if INDEX.md changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          if git diff --quiet; then
+            echo "No changes to commit."
+          else
+            git add INDEX.md
+            git commit -m "Automated update of INDEX.md"
+            git push
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
