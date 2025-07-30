@@ -3,11 +3,9 @@ name: Update Credits List
 on:
   pull_request:
     types: [closed]
-    branches: [master] # Change to 'main' if your branch is named 'main'
-
+    branches: [master] # Change to 'main' if your default branch is 'main'
   schedule:
-    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
-
+    - cron: '0 8 * * *' # Every day at 8h UTC
   workflow_dispatch:
     inputs:
       dry_run:
@@ -43,21 +41,21 @@ jobs:
             if [[ -z "$name" || -z "$email" || -z "$date" ]]; then
               continue
             fi
-          
+
             # Determine GitHub profile
             if [[ "$email" =~ ^[0-9]+@users\.noreply\.github\.com$ ]]; then
               username="@${email%%@*}"
-            elif [[ "$email" =~ \+(.+)@users\.noreply\.github\.com$ ]]; then
+            elif [[ "$email" =~ \+([^@]+)@users\.noreply\.github\.com$ ]]; then
               username="@${BASH_REMATCH[1]}"
             else
               username="@unknown"
             fi
-          
+
             key="$name|$username"
             commit_count["$key"]=$(( ${commit_count["$key"]:-0} + 1 ))
-          
+
             # Keep latest date and hash
-            if [[ -z "${last_date["$key"]}" || "$date" > "${last_date["$key"]}" ]]; then
+            if [[ -z "${last_date["$key"]+x}" || "$date" > "${last_date["$key"]-}" ]]; then
               last_date["$key"]="$date"
               last_hash["$key"]="$hash"
             fi
