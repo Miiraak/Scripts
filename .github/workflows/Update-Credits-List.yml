@@ -43,7 +43,7 @@ jobs:
             if [[ -z "$name" || -z "$email" || -z "$date" ]]; then
               continue
             fi
-
+          
             # Determine GitHub profile
             if [[ "$email" =~ ^[0-9]+@users\.noreply\.github\.com$ ]]; then
               username="@${email%%@*}"
@@ -52,16 +52,15 @@ jobs:
             else
               username="@unknown"
             fi
-
+          
             key="$name|$username"
-            ((commit_count["$key"]++))
-
+            commit_count["$key"]=$(( ${commit_count["$key"]:-0} + 1 ))
+          
             # Keep latest date and hash
             if [[ -z "${last_date["$key"]}" || "$date" > "${last_date["$key"]}" ]]; then
               last_date["$key"]="$date"
               last_hash["$key"]="$hash"
             fi
-
           done < commits_full.log
 
           temp="CREDITS.tmp"
