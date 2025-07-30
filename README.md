@@ -74,7 +74,7 @@ Always review the documentation and comments within each script before execution
 
 ## Licenses
 - Some scripts and tools may include or reference third-party binaries or code.
-- All external licenses and attributions are provided in the [`/licenses/`](./Licenses) directory.
+- All external licenses and attributions are provided in the [`/licenses/`](https://github.com/Miiraak/Scripts/tree/master/Licences) directory.
 - Redistribution conditions are respected—consult license files before use or sharing.
 
 ---
