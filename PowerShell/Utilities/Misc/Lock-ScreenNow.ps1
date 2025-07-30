@@ -11,7 +11,7 @@
 #                       ░    ░   ░     ░           ░  ░     ░  ░░  ░                   |
 #                                                                                      |
 #     Title        : Lock-ScreenNow.ps1                                                |
-#     Link         : https://github.com/miiraak/Scripts/PowerShell/utilities/misc/     |
+#     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/utilities/misc/     |
 #     Version      : 1.0                                                               |
 #     Category     : utilities/misc                                                    |
 #     Target       : Windows 10/11                                                     |

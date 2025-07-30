@@ -11,7 +11,7 @@
 #                       ░    ░   ░     ░           ░  ░     ░  ░░  ░                                 |
 #                                                                                                    |
 #     Title        : Capture-Screen.ps1                                                              |
-#     Link         : https://github.com/miiraak/Scripts/PowerShell/collection/screencapture/         |
+#     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/Collection/ScreenCapture/         |
 #     Version      : 1.3                                                                             |
 #     Category     : collection/screencapture                                                        |
 #     Target       : Windows 10/11                                                                   |
