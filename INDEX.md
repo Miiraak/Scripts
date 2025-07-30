@@ -27,6 +27,10 @@ PowerShell
 │   └── WifiCreds
 │       ├── Export-WiFiPasswords.md
 │       └── Export-WiFiPasswords.ps1
+├── Discovery
+│   └── Local
+│       ├── Get-FilenameList.md
+│       └── Get-FilenameList.ps1
 └── Utilities
     └── Misc
         ├── Get-Weather.md
@@ -34,6 +38,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-9 directories, 12 files
+11 directories, 14 files
 ```
 
