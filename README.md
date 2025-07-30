@@ -1,5 +1,6 @@
 # Scripts 
-![Last update of INDEX.md](https://img.shields.io/github/last-commit/Miiraak/Scripts?filename=INDEX.md&label=Last%20INDEX.md%20Update&color=blue&style=flat-square)
+![Update INDEX.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Credits-List.yml/badge.svg) 
+![Update CREDITS.md](https://github.com/Miiraak/Scripts/actions/workflows/Update-Repository-Index.yml/badge.svg)
 
 ---
 
