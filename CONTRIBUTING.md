@@ -5,8 +5,8 @@ All contributions are welcome—whether submitting scripts, documentation, impro
 
 ## How to Contribute
 
-1. **Open an Issue**  
-   - Please create an issue before submitting a pull request, so we can discuss your proposal.
+1. **Open an Issue**  _(optional)_
+   - Create an issue before submitting a pull request, so we can discuss your proposal.
    - Use the relevant issue template for bug reports, feature requests, or script submissions.
 
 2. **Submit a Pull Request**  
