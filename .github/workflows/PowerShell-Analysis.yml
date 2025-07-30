@@ -2,11 +2,11 @@ name: PowerShell Analysis
 
 on:
   schedule:
-    - cron: '0 8 * * *'           # Every day at 8am UTC
-  workflow_dispatch:               # Manual trigger
+    - cron: '0 8 * * *'
+  workflow_dispatch:
   pull_request:
     paths:
-      - '**/*.ps1'                 # PRs that touch .ps1 files
+      - '**/*.ps1'
 
 jobs:
   scan-all:
@@ -31,23 +31,35 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
-  
+
       - name: Install GitHub CLI
-        run: sudo apt-get install gh
-  
+        run: sudo apt-get install -y gh
+
       - name: Install PSScriptAnalyzer
         run: pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
-  
+
       - name: Fetch base branch
         run: git fetch origin ${{ github.event.pull_request.base.ref }}
-  
-      - name: Analyze only modified/added/renamed .ps1 files
+
+      - name: Analyze only modified/added/renamed .ps1 files and comment on PR
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AWSR }}
         run: |
           FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$' | xargs)
           if [ -n "$FILES" ]; then
-            pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -ReportSummary"
+            pwsh -Command "Invoke-ScriptAnalyzer -Path $FILES -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
+            # Format JSON as markdown table or code block (simple version below)
+            echo '## PSScriptAnalyzer Results' > psa_result.md
+            if [ -s psa_result.json ]; then
+              echo '\n```json' >> psa_result.md
+              cat psa_result.json >> psa_result.md
+              echo '```' >> psa_result.md
+            else
+              echo 'No issues detected.' >> psa_result.md
+            fi
+            # Comment the results on the PR
+            gh pr comment ${{ github.event.pull_request.number }} \
+              --body-file psa_result.md
           else
             echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
           fi
