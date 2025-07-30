@@ -23,14 +23,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Extract commits and update Credits.md
+      - name: Extract commits and update CREDITS.md
         id: update
         run: |
-          echo "Updating Credits.md from commit history..."
+          echo "Updating CREDITS.md from commit history..."
 
-          cp Credits.md Credits.md.bak
+          cp CREDITS.md CREDITS.md.bak
 
-          temp="credits.tmp"
+          temp="CREDITS.tmp"
           echo "" > $temp
 
           git log --reverse --pretty=format:'%H|%an|%ae|%ad|%s' | while IFS='|' read -r hash name email date msg; do
@@ -76,12 +76,12 @@ jobs:
               print new_entries
               exit
             }
-          ' Credits.md.bak > Credits.md
+          ' CREDITS.md.bak > CREDITS.md
 
           rm $temp
 
       - name: Show diff
-        run: git diff Credits.md || true
+        run: git diff CREDITS.md || true
 
       - name: Commit and push if not dry-run
         if: github.event.inputs.dry_run != 'true'
@@ -92,8 +92,8 @@ jobs:
           if git diff --quiet; then
             echo "No changes to commit."
           else
-            git add Credits.md
-            git commit -m "Automated update of Credits.md"
+            git add CREDITS.md
+            git commit -m "Automated update of CREDITS.md"
             git push
           fi
         env:
