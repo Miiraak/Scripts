@@ -20,6 +20,10 @@ PowerShell
 │   └── ScreenCapture
 │       ├── Capture-Screen.md
 │       └── Capture-Screen.ps1
+├── CredentialAccess
+│   └── WifiCreds
+│       ├── Export-WiFiPasswords.md
+│       └── Export-WiFiPasswords.ps1
 └── Utilities
     └── Misc
         ├── Get-Weather.md
@@ -27,6 +31,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-6 directories, 8 files
+8 directories, 10 files
 ```
 
