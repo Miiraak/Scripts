@@ -16,8 +16,10 @@ PowerShell
 └── Utilities
     └── Misc
         ├── Get-Weather.md
-        └── Get-Weather.ps1
+        ├── Get-Weather.ps1
+        ├── Lock-ScreenNow.md
+        └── Lock-ScreenNow.ps1
 
-3 directories, 2 files
+3 directories, 4 files
 ```
 
