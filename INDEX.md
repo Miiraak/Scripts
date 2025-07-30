@@ -30,7 +30,9 @@ PowerShell
 ├── Discovery
 │   └── Local
 │       ├── Get-FilenameList.md
-│       └── Get-FilenameList.ps1
+│       ├── Get-FilenameList.ps1
+│       ├── Get-StartupItems.md
+│       └── Get-StartupItems.ps1
 └── Utilities
     └── Misc
         ├── Get-Weather.md
@@ -38,6 +40,6 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-11 directories, 14 files
+11 directories, 16 files
 ```
 
