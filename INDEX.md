@@ -72,3 +72,46 @@ PowerShell
 16 directories, 38 files
 ```
 
+### Licences
+
+```plaintext
+Licences
+├── BIND9
+│   ├── CODE_OF_CONDUCT.md
+│   ├── COPYRIGHT
+│   └── LICENSE
+├── PSTools_Eula.txt
+├── mimikatz_licence
+└── nmap
+    ├── BSD-modified.txt
+    ├── BSD-simplified
+    ├── LGPL-2
+    ├── LGPL-2.1
+    ├── LIBLINEAR-license.txt
+    ├── LICENSE
+    ├── Libdnet-license.txt
+    ├── Lua-license.txt
+    ├── MIT
+    ├── MPL-1.1
+    ├── OpenSSL-license.txt
+    ├── PCRE-license.txt
+    ├── WinPcap-license.txt
+    └── zlib-license.txt
+
+3 directories, 19 files
+```
+
+### Tools
+
+```plaintext
+Tools
+├── PsExec.exe
+├── ScriptTemplate.ps1
+├── dig.exe
+├── html.zip
+├── mimikatz.exe
+└── nmap.zip
+
+1 directory, 6 files
+```
+
