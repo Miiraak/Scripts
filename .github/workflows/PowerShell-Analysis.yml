@@ -24,27 +24,28 @@ jobs:
         run: |
           pwsh -Command "Invoke-ScriptAnalyzer -Path . -Recurse | ConvertTo-Json -Depth 5" > psa_result.json
 
-          printf "%s\n" \
-          "\$results = Get-Content psa_result.json | ConvertFrom-Json" \
-          "\$md = @()" \
-          "\$md += '## PSScriptAnalyzer Results'" \
-          "\$md += ''" \
-          "if (\$results.Count -eq 0) {" \
-          "  \$md += 'No issues detected.'" \
-          "} else {" \
-          "  \$md += '| File | Line | Rule | Severity | Message |'" \
-          "  \$md += '| ---- | ---- | ---- | -------- | ------- |'" \
-          "  foreach (\$item in \$results) {" \
-          "    \$file = if (\$item.ScriptName) { \$item.ScriptName } else { '' }" \
-          "    \$line = if (\$item.Line) { \$item.Line } else { '' }" \
-          "    \$rule = if (\$item.RuleName) { \$item.RuleName } else { '' }" \
-          "    \$severity = switch (\$item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { \$item.Severity } }" \
-          "    \$msg = (\$item.Message -replace '\|','\\|') -replace '\r?\n',' '" \
-          "    if (\$msg.Length -gt 120) { \$msg = \$msg.Substring(0,117) + '...' }" \
-          "    \$md += \"| \$file | \$line | \$rule | \$severity | \$msg |\"" \
-          "  }" \
-          "}" \
-          "Set-Content -Path psa_result.md -Value (\$md -join \"\`n\")" > format_psa.ps1
+          cat <<'EOF' > format_psa.ps1
+          $results = Get-Content psa_result.json | ConvertFrom-Json
+          $md = @()
+          $md += '## PSScriptAnalyzer Results'
+          $md += ''
+          if ($results.Count -eq 0) {
+            $md += 'No issues detected.'
+          } else {
+            $md += '| File | Line | Rule | Severity | Message |'
+            $md += '| ---- | ---- | ---- | -------- | ------- |'
+            foreach ($item in $results) {
+              $file = if ($item.ScriptName) { $item.ScriptName } else { '' }
+              $line = if ($item.Line) { $item.Line } else { '' }
+              $rule = if ($item.RuleName) { $item.RuleName } else { '' }
+              $severity = switch ($item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $item.Severity } }
+              $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+              if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+              $md += "| $file | $line | $rule | $severity | $msg |"
+            }
+          }
+          Set-Content -Path psa_result.md -Value ($md -join "`n")
+          EOF
 
           pwsh -File format_psa.ps1
 
@@ -139,34 +140,36 @@ jobs:
         run: |
           FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$')
           if [ -n "$FILES" ]; then
-            printf "%s\n" \
-            "param([string[]]\$Files)" \
-            "\$results = Invoke-ScriptAnalyzer -Path \$Files -Recurse | ConvertTo-Json -Depth 5" \
-            "Set-Content -Path psa_result.json -Value \$results" > run_psa.ps1
+            cat <<'EOF' > run_psa.ps1
+            param([string[]]$Files)
+            $results = Invoke-ScriptAnalyzer -Path $Files -Recurse | ConvertTo-Json -Depth 5
+            Set-Content -Path psa_result.json -Value $results
+            EOF
 
             pwsh -File run_psa.ps1 $FILES
 
-            printf "%s\n" \
-            "\$results = Get-Content psa_result.json | ConvertFrom-Json" \
-            "\$md = @()" \
-            "\$md += '## PSScriptAnalyzer Results'" \
-            "\$md += ''" \
-            "if (\$results.Count -eq 0) {" \
-            "  \$md += 'No issues detected.'" \
-            "} else {" \
-            "  \$md += '| File | Line | Rule | Severity | Message |'" \
-            "  \$md += '| ---- | ---- | ---- | -------- | ------- |'" \
-            "  foreach (\$item in \$results) {" \
-            "    \$file = if (\$item.ScriptName) { \$item.ScriptName } else { '' }" \
-            "    \$line = if (\$item.Line) { \$item.Line } else { '' }" \
-            "    \$rule = if (\$item.RuleName) { \$item.RuleName } else { '' }" \
-            "    \$severity = switch (\$item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { \$item.Severity } }" \
-            "    \$msg = (\$item.Message -replace '\|','\\|') -replace '\r?\n',' '" \
-            "    if (\$msg.Length -gt 120) { \$msg = \$msg.Substring(0,117) + '...' }" \
-            "    \$md += \"| \$file | \$line | \$rule | \$severity | \$msg |\"" \
-            "  }" \
-            "}" \
-            "Set-Content -Path psa_result.md -Value (\$md -join \"\`n\")" > format_psa.ps1
+            cat <<'EOF' > format_psa.ps1
+            $results = Get-Content psa_result.json | ConvertFrom-Json
+            $md = @()
+            $md += '## PSScriptAnalyzer Results'
+            $md += ''
+            if ($results.Count -eq 0) {
+              $md += 'No issues detected.'
+            } else {
+              $md += '| File | Line | Rule | Severity | Message |'
+              $md += '| ---- | ---- | ---- | -------- | ------- |'
+              foreach ($item in $results) {
+                $file = if ($item.ScriptName) { $item.ScriptName } else { '' }
+                $line = if ($item.Line) { $item.Line } else { '' }
+                $rule = if ($item.RuleName) { $item.RuleName } else { '' }
+                $severity = switch ($item.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $item.Severity } }
+                $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+                if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+                $md += "| $file | $line | $rule | $severity | $msg |"
+              }
+            }
+            Set-Content -Path psa_result.md -Value ($md -join "`n")
+            EOF
 
             pwsh -File format_psa.ps1
 
