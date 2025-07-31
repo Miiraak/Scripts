@@ -41,7 +41,7 @@
     URL to download website template ZIP.
 
 .PARAMETER TemplateFolder
-    Local folder for template files (default: "html").
+    Local folder for template files (default: "template").
 
 .PARAMETER NoBrowser
     Prevents automatic browser launch.
@@ -58,7 +58,7 @@ param (
     [Parameter(Mandatory=$true)][string]$Domain,
     [Parameter(Mandatory=$true)][string]$TLD,
     [int]$Port = 8080,
-    [string]$TemplateUrl = "https://github.com/Miiraak/Scripts/tree/master/Tools/html.zip",
+    [string]$TemplateUrl = "https://github.com/Miiraak/Scripts/raw/master/Tools/html.zip",
     [string]$TemplateFolder = "html",
     [switch]$NoBrowser,
     [switch]$StopServer
@@ -81,20 +81,36 @@ function Download-Template {
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $ExtractTemp = Join-Path $ScriptDir "html_temp"
     if (Test-Path $ExtractTemp) { Remove-Item $ExtractTemp -Recurse -Force }
-    [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $ExtractTemp)
-    # If zip contains a root folder, move its content
+    try {
+        [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $ExtractTemp)
+    } catch {
+        Write-Error "Extraction of the zip file failed. Please check that the downloaded file is a valid zip. File: $ZipPath"
+        Remove-Item $ZipPath -Force
+        return
+    }
+
     $First = Get-ChildItem -Directory $ExtractTemp | Select-Object -First 1
     if ($First) {
+        if (-not (Test-Path $TemplatePath)) { New-Item -ItemType Directory -Path $TemplatePath | Out-Null }
         Move-Item -Path (Join-Path $First.FullName "*") -Destination $TemplatePath -Force
     } else {
+        if (-not (Test-Path $TemplatePath)) { New-Item -ItemType Directory -Path $TemplatePath | Out-Null }
         Move-Item -Path (Join-Path $ExtractTemp "*") -Destination $TemplatePath -Force
     }
     Remove-Item $ZipPath
     Remove-Item $ExtractTemp -Recurse -Force
+
+    if (-not (Test-Path $TemplatePath)) {
+        throw "Error: The template folder was not created after extraction."
+    }
 }
 
 function Replace-Variables-In-Files {
     Write-Host "Customizing template files..."
+    if (-not (Test-Path $TemplatePath)) {
+        Write-Error "Impossible to access files: the template folder does not exist or is corrupt."
+        return
+    }
     Get-ChildItem -Path $TemplatePath -Recurse -Include *.html,*.css,*.js | ForEach-Object {
         (Get-Content $_.FullName) -replace "{{domain}}", $Domain -replace "{{tld}}", $TLD -replace "{{port}}", $Port | Set-Content $_.FullName
     }
@@ -121,6 +137,10 @@ function Restore-Hosts {
 
 function Start-PythonServer {
     Write-Host "Starting web server on port $Port..."
+    if (-not (Test-Path $TemplatePath)) {
+        Write-Error "The web folder ($TemplatePath) does not exist. Unable to start the server."
+        return
+    }
     $Args = "-m http.server $Port --directory `"$TemplatePath`""
     Start-Process -FilePath $PythonExe -ArgumentList $Args -WindowStyle Hidden
     Start-Sleep -Seconds 2
@@ -137,6 +157,12 @@ function Stop-PythonServer {
     Get-Process -Name python -ErrorAction SilentlyContinue | Stop-Process -Force
     Restore-Hosts
     Write-Host "Server stopped. Hosts file restored."
+    if (Test-Path $TemplatePath) {
+        Write-Host "Removing template folder: $TemplatePath"
+        Remove-Item $TemplatePath -Recurse -Force
+    } else {
+        Write-Host "Template folder does not exist, nothing to remove."
+    }
 }
 
 # ---------------[Execution]------------------ #
@@ -145,8 +171,17 @@ if ($StopServer) {
     exit
 }
 
+if ($TLD.StartsWith(".")) {
+    $TLD = $TLD.Substring(1)
+    $ServerAddress = "$Domain.$TLD"
+}
+
 if (-not (Test-Path $TemplatePath)) {
     Download-Template
+    if (-not (Test-Path $TemplatePath)) {
+        Write-Error "The template could not be downloaded or extracted. Abandon."
+        exit 1
+    }
 } else {
     Write-Host "Template folder already exists, using existing files."
 }
@@ -159,3 +194,6 @@ if (-not $NoBrowser) { Open-Browser }
 Write-Host "Access your site at: http://${ServerAddress}:${Port}/"
 Write-Host "To stop and restore hosts: .\Setup-LocalWebServer.ps1 -StopServer"
 Write-Host "Web folder in use: $TemplatePath"
+
+# ---------------[End of Script]------------------ #
+exit 0
