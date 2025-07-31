@@ -51,6 +51,10 @@ PowerShell
 │       ├── Get-IPConfigSummary.ps1
 │       ├── Logoff-IdleSessions.md
 │       └── Logoff-IdleSessions.ps1
+├── Exfiltration
+│   └── HTTP
+│       ├── Setup-LocalWebServer.md
+│       └── Setup-LocalWebServer.ps1
 ├── PrivilegeEscalation
 │   ├── TokenManipulation
 │   │   ├── Invoke-TokenManipulation.md
@@ -70,7 +74,7 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-16 directories, 38 files
+18 directories, 40 files
 ```
 
 ### Licences
