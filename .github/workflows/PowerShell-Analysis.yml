@@ -71,7 +71,7 @@ jobs:
           }
 
           function Format-Table ($items, $title) {
-            if ($items.Count -eq 0) { return "`n### $title`n\n_No issues found under this category._`n" }
+            if ($items.Count -eq 0) { return "`n### $title`n`n_No issues found under this category._`n" }
             $sorted = $items | Sort-Object ScriptName, Line
             $table = @()
             $table += "`n### $title`n"
@@ -100,19 +100,22 @@ jobs:
           Set-Content -Path FIXIT.md -Value ($fixit -join "`n")
 
       - name: Commit and push FIXIT.md if changed
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
+          # Utiliser la branche par défaut du repo
+          BRANCH=${{ github.ref_name }}
+          # Vérification du changement
           if git diff --quiet FIXIT.md; then
             echo "No changes to FIXIT.md."
           else
             git add FIXIT.md
             git commit -m "Update FIXIT.md from scheduled/dispatch PSScriptAnalyzer scan"
-            git pull --rebase origin master
-            git push
+            git pull --rebase origin "$BRANCH"
+            git push origin HEAD:"$BRANCH"
           fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   scan-pr:
     if: github.event_name == 'pull_request'
@@ -138,7 +141,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         shell: bash
         run: |
-          FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...HEAD | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$')
+          FILES=$(git diff --name-status origin/${{ github.event.pull_request.base.ref }}...${{ github.head_ref }} | grep -E '^[AMR]' | awk '{print $NF}' | grep '\.ps1$')
           if [ -n "$FILES" ]; then
             cat <<'EOF' > run_psa.ps1
             param([string[]]$Files)
@@ -173,6 +176,7 @@ jobs:
 
             pwsh -File format_psa.ps1
 
+            # Ajout du commentaire sur le PR
             gh pr comment ${{ github.event.pull_request.number }} --body-file psa_result.md
           else
             echo "No PowerShell (.ps1) scripts were modified, added or renamed in this PR."
