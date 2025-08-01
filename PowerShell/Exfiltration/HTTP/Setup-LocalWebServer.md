@@ -30,7 +30,6 @@
 | StopServer     | switch | No        | Stops server, restores hosts file, and exits               |
 
 ## Usage
-
 ### Start the Web Server
 ```powershell
 .\Setup-LocalWebServer.ps1 -Domain "mytestsite" -TLD "local"
