@@ -60,7 +60,7 @@ param (
     [int]$Port = 8080,
     [switch]$NoBrowser,
     [switch]$StopServer
-)
+)   
 
 # ---------------[Variables]--------------- #
 $ScriptDir      = Split-Path -Parent $MyInvocation.MyCommand.Path
