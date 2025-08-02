@@ -1,7 +1,8 @@
 ﻿########################################################################################
 #                                                                                      |
 #     Title        : <scriptname>.ps1                                                  |
-#     Link         : https://github.com/miiraak/Scripts/<language>/<folder>/subfolder> |
+#     Link         : https://github.com/miiraak/Scripts/PowerShell/<folder>/subfolder> |
+#     Author       : XXXXXXXXXx                                                        |
 #     Version      : X.X.X                                                             |
 #     Category     : <category>                                                        |
 #     Target       : <system target>                                                   |
