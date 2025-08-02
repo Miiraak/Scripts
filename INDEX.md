@@ -30,6 +30,10 @@ PowerShell
 │   └── WifiCreds
 │       ├── Export-WiFiPasswords.md
 │       └── Export-WiFiPasswords.ps1
+├── DefenseEvasion
+│   └── ProcessManipulation
+│       ├── Invoke-SandboxDetection.md
+│       └── Invoke-SandboxDetection.ps1
 ├── Discovery
 │   ├── Local
 │   │   ├── Get-BIOSInfo.md
@@ -74,7 +78,7 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-18 directories, 40 files
+20 directories, 42 files
 ```
 
 ### Licences
