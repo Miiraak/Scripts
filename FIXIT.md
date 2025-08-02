@@ -111,8 +111,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-Keylogger.ps1 | 205 | PSAvoidUsingWriteHost | File 'Invoke-Keylogger.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-TokenManipulation.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Invoke-TokenManipulation.ps1' |
 | Invoke-TokenManipulation.ps1 | 78 | PSAvoidUsingWriteHost | File 'Invoke-TokenManipulation.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, d... |
-| Invoke-TokenManipulation.ps1 | 92 | PSUseSingularNouns | The cmdlet 'Cleanup-Traces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-TokenManipulation.ps1 | 92 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Traces' uses an unapproved verb. |
+| Invoke-TokenManipulation.ps1 | 92 | PSUseSingularNouns | The cmdlet 'Cleanup-Traces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-TokenManipulation.ps1 | 165 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 172 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 179 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Persistence' has verb that could change system state. Therefore, the function has to support 'ShouldPro... |
@@ -159,8 +159,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Scan-Own-Ports.ps1 | 113 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 114 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 116 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
-| ScriptTemplate.ps1 | 27 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | ScriptTemplate.ps1 | 27 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
+| ScriptTemplate.ps1 | 27 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | ScriptTemplate.ps1 | 28 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
 | ScriptTemplate.ps1 | 28 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | ScriptTemplate.ps1 | 30 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
@@ -176,11 +176,11 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Setup-LocalWebServer.ps1 | 61 | PSReviewUnusedParameter | The parameter 'TemplateUrl' has been declared but not used. |
 | Setup-LocalWebServer.ps1 | 77 | PSUseApprovedVerbs | The cmdlet 'Download-Template' uses an unapproved verb. |
 | Setup-LocalWebServer.ps1 | 78 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 108 | PSUseSingularNouns | The cmdlet 'Replace-Variables-In-Files' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 108 | PSUseApprovedVerbs | The cmdlet 'Replace-Variables-In-Files' uses an unapproved verb. |
+| Setup-LocalWebServer.ps1 | 108 | PSUseSingularNouns | The cmdlet 'Replace-Variables-In-Files' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 109 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 119 | PSUseApprovedVerbs | The cmdlet 'Patch-Hosts' uses an unapproved verb. |
 | Setup-LocalWebServer.ps1 | 119 | PSUseSingularNouns | The cmdlet 'Patch-Hosts' uses a plural noun. A singular noun should be used instead. |
+| Setup-LocalWebServer.ps1 | 119 | PSUseApprovedVerbs | The cmdlet 'Patch-Hosts' uses an unapproved verb. |
 | Setup-LocalWebServer.ps1 | 121 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | Setup-LocalWebServer.ps1 | 127 | PSUseSingularNouns | The cmdlet 'Restore-Hosts' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 129 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
@@ -198,8 +198,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Setup-LocalWebServer.ps1 | 195 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | Setup-LocalWebServer.ps1 | 196 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
-| User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
+| User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
