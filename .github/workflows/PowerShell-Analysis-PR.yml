@@ -1,4 +1,4 @@
-name: Analyze PowerShell (.ps1) files in PR
+name: PowerShell Analysis on PR
 
 on:
   pull_request:
@@ -16,16 +16,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gh
 
-      - name: List added or modified .ps1 files in PR
+      - name: Find .ps1 files added or modified in PR
         id: ps1_files
         run: |
           files=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' || true)
           echo "files=$files" >> $GITHUB_OUTPUT
 
-      - name: Exit if no .ps1 files found in PR
+      - name: Exit if no .ps1 files in PR
         if: steps.ps1_files.outputs.files == ''
         run: |
-          echo "No .ps1 files found in this PR, exiting workflow."
+          echo "No .ps1 files found in this PR, exiting."
           exit 0
 
       - name: Install PowerShell & PSScriptAnalyzer
@@ -38,33 +38,58 @@ jobs:
           sudo apt-get install -y powershell
           pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
 
-      - name: Analyze .ps1 files with PSScriptAnalyzer
-        id: analyze
+      - name: Analyze .ps1 files with PSScriptAnalyzer and format as Markdown
+        id: psa_report
+        shell: pwsh
         run: |
-          result=""
-          for file in ${{ steps.ps1_files.outputs.files }}; do
-            analysis=$(pwsh -Command "Import-Module PSScriptAnalyzer; Invoke-ScriptAnalyzer -Path '$file' | ConvertTo-Json -Depth 5")
-            result="$result
-          #### Results for \`$file\`
-          \`\`\`json
-          $analysis
-          \`\`\`"
-          done
-          # Prepare nicely formatted summary
-          echo "report<<EOF" >> $GITHUB_OUTPUT
-          echo "$result" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          $files = '${{ steps.ps1_files.outputs.files }}'.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+          $allResults = @()
+          foreach ($file in $files) {
+            $results = Invoke-ScriptAnalyzer -Path $file | ForEach-Object {
+              [PSCustomObject]@{
+                ScriptName = $_.ScriptName
+                Line = $_.Line
+                RuleName = $_.RuleName
+                Severity = switch ($_.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $_.Severity } }
+                Message = $_.Message
+              }
+            }
+            $allResults += $results
+          }
+          $md = @()
+          $md += "## PSScriptAnalyzer Report for .ps1 files in this PR"
+          $md += ""
+          if ($allResults.Count -eq 0) {
+            $md += "No issues detected."
+          } else {
+            $md += "| File | Line | Rule | Severity | Message |"
+            $md += "| ---- | ---- | ---- | -------- | ------- |"
+            foreach ($item in $allResults) {
+              $file = $item.ScriptName
+              $line = $item.Line
+              $rule = $item.RuleName
+              $severity = $item.Severity
+              $msg = ($item.Message -replace '\|','\\|') -replace '\r?\n',' '
+              if ($msg.Length -gt 120) { $msg = $msg.Substring(0,117) + '...' }
+              $md += "| $file | $line | $rule | $severity | $msg |"
+            }
+          }
+          # Output markdown for later step
+          $mdString = $md -join "`n"
+          echo "psa_md<<EOF" >> $env:GITHUB_OUTPUT
+          echo "$mdString" >> $env:GITHUB_OUTPUT
+          echo "EOF" >> $env:GITHUB_OUTPUT
 
-      - name: Post analysis report as PR comment
+      - name: Post PSScriptAnalyzer Markdown report to PR
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.AWSR }}
           script: |
-            const report = `${{ steps.analyze.outputs.report }}`;
+            const report = `${{ steps.psa_report.outputs.psa_md }}`;
             const pr = context.payload.pull_request.number;
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: pr,
-              body: `## PSScriptAnalyzer Report for .ps1 files in this PR\n${report}`
+              body: report
             });
