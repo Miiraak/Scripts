@@ -12,7 +12,7 @@
 # ---------------[Parameters]--------------- #
 param (
     [string]$param1 = "param1",
-    [string]$param2 = "param2"          
+    [string]$param2 = "param2"
 )
 
 # ---------------[Variables]--------------- #
@@ -23,7 +23,7 @@ $Parameter3 = $null
 # ---------------[Functions]--------------- #
 function functionName {
     $Parameter3 = $Parameter1 + $Parameter2
-    echo "The result is: $Parameter3"
+    Write-Output "The result is: $Parameter3"
 }
 
 # ---------------[Execution]--------------- #
