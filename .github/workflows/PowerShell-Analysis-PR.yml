@@ -11,13 +11,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install GitHub CLI
-        run: sudo apt-get update && sudo apt-get install -y gh
-
-      - name: Find .ps1 files added or modified in PR
+      - name: Find .ps1 files in PR (via GitHub API)
         id: ps1_files
         run: |
-          files=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' | paste -sd ';' -)
+          files=$(curl -s -H "Authorization: Bearer ${{ secrets.AWSR }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            | jq -r '.[].filename' | grep '\.ps1$' | paste -sd ';' -)
           echo "files=$files" >> $GITHUB_OUTPUT
 
       - name: Exit if no .ps1 files in PR
