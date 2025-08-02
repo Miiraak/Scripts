@@ -12,23 +12,20 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install GitHub CLI
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gh
+        run: sudo apt-get update && sudo apt-get install -y gh
 
       - name: Find .ps1 files added or modified in PR
         id: ps1_files
         run: |
-          files=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' || true)
+          files=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' | paste -sd ';' -)
           echo "files=$files" >> $GITHUB_OUTPUT
 
       - name: Exit if no .ps1 files in PR
         if: steps.ps1_files.outputs.files == ''
-        run: |
-          echo "No .ps1 files found in this PR, exiting."
-          exit 0
+        run: echo "No .ps1 files found in this PR, exiting."
 
       - name: Install PowerShell & PSScriptAnalyzer
+        if: steps.ps1_files.outputs.files != ''
         run: |
           sudo apt-get update
           sudo apt-get install -y wget apt-transport-https software-properties-common
@@ -39,22 +36,25 @@ jobs:
           pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
 
       - name: Analyze .ps1 files with PSScriptAnalyzer and format as Markdown
+        if: steps.ps1_files.outputs.files != ''
         id: psa_report
         shell: pwsh
         run: |
-          $files = '${{ steps.ps1_files.outputs.files }}'.Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
+          $files = '${{ steps.ps1_files.outputs.files }}'.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
           $allResults = @()
           foreach ($file in $files) {
-            $results = Invoke-ScriptAnalyzer -Path $file | ForEach-Object {
-              [PSCustomObject]@{
-                ScriptName = $_.ScriptName
-                Line = $_.Line
-                RuleName = $_.RuleName
-                Severity = switch ($_.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $_.Severity } }
-                Message = $_.Message
+            if (Test-Path $file) {
+              $results = Invoke-ScriptAnalyzer -Path $file | ForEach-Object {
+                [PSCustomObject]@{
+                  ScriptName = $_.ScriptName
+                  Line = $_.Line
+                  RuleName = $_.RuleName
+                  Severity = switch ($_.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $_.Severity } }
+                  Message = $_.Message
+                }
               }
+              $allResults += $results
             }
-            $allResults += $results
           }
           $md = @()
           $md += "## PSScriptAnalyzer Report for .ps1 files in this PR"
@@ -74,13 +74,13 @@ jobs:
               $md += "| $file | $line | $rule | $severity | $msg |"
             }
           }
-          # Output markdown for later step
           $mdString = $md -join "`n"
           echo "psa_md<<EOF" >> $env:GITHUB_OUTPUT
           echo "$mdString" >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
 
       - name: Post PSScriptAnalyzer Markdown report to PR
+        if: steps.ps1_files.outputs.files != ''
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.AWSR }}
