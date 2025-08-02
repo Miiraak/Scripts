@@ -58,7 +58,6 @@ param (
     [Parameter(Mandatory=$true)][string]$Domain,
     [Parameter(Mandatory=$true)][string]$TLD,
     [int]$Port = 8080,
-    [string]$TemplateUrl = "https://github.com/Miiraak/Scripts/raw/master/Tools/html.zip",
     [switch]$NoBrowser,
     [switch]$StopServer
 )
@@ -76,7 +75,7 @@ $HostsBackup    = "$HostsPath.bak_psweb"
 function DownloadTemplate {
     Write-Output "Downloading template..."
     $ZipPath = Join-Path $ScriptDir "html.zip"
-    Invoke-WebRequest -Uri $TemplateUrl -OutFile $ZipPath
+    Invoke-WebRequest -Uri "https://github.com/Miiraak/Scripts/raw/master/Tools/html.zip" -OutFile $ZipPath
     Add-Type -AssemblyName System.IO.Compression.FileSystem
     $ExtractTemp = Join-Path $ScriptDir "html_temp"
     if (Test-Path $ExtractTemp) { Remove-Item $ExtractTemp -Recurse -Force }
