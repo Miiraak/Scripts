@@ -3,7 +3,7 @@ name: Update Credits List
 on:
   pull_request:
     types: [closed]
-    branches: [master] # Remplace par 'main' si ta branche principale est main
+    branches: [master]
   schedule:
     - cron: '0 8 * * *'  # Tous les jours à 8h UTC
   workflow_dispatch:
