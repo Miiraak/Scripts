@@ -7,7 +7,6 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | File | Line | Rule | Message |
 | ---- | ---- | ---- | ------- |
 | Check-InternetConnection.ps1 | 59 | PSAvoidUsingComputerNameHardcoded | The ComputerName parameter of cmdlet 'Test-Connection' is hardcoded. This will expose sensitive information about the... |
-| ScriptTemplate.ps1 | 92 | PSAvoidUsingConvertToSecureStringWithPlainText | File 'ScriptTemplate.ps1' uses ConvertTo-SecureString with plaintext. This will expose secure information. Encrypted ... |
 | User-Credential.ps1 | 339 | PSAvoidUsingConvertToSecureStringWithPlainText | File 'User-Credential.ps1' uses ConvertTo-SecureString with plaintext. This will expose secure information. Encrypted... |
 
 ### Warnings
@@ -92,8 +91,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-BypassUAC.ps1 | 82 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 83 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 93 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Registry' uses an unapproved verb. |
-| Invoke-BypassUAC.ps1 | 106 | PSUseApprovedVerbs | The cmdlet 'Full-CleanTraces' uses an unapproved verb. |
 | Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
+| Invoke-BypassUAC.ps1 | 106 | PSUseApprovedVerbs | The cmdlet 'Full-CleanTraces' uses an unapproved verb. |
 | Invoke-BypassUAC.ps1 | 112 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 114 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 117 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
@@ -109,6 +108,21 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-Keylogger.ps1 | 203 | PSAvoidUsingWriteHost | File 'Invoke-Keylogger.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-Keylogger.ps1 | 204 | PSAvoidUsingWriteHost | File 'Invoke-Keylogger.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-Keylogger.ps1 | 205 | PSAvoidUsingWriteHost | File 'Invoke-Keylogger.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
+| Invoke-SandboxDetection.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Invoke-SandboxDetection.ps1' |
+| Invoke-SandboxDetection.ps1 | 48 | PSReviewUnusedParameter | The parameter 'Verbose' has been declared but not used. |
+| Invoke-SandboxDetection.ps1 | 49 | PSReviewUnusedParameter | The parameter 'ShowAllDetails' has been declared but not used. |
+| Invoke-SandboxDetection.ps1 | 55 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
+| Invoke-SandboxDetection.ps1 | 59 | PSAvoidUsingWriteHost | File 'Invoke-SandboxDetection.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, do... |
+| Invoke-SandboxDetection.ps1 | 138 | PSAvoidGlobalVars | Found global variable 'global:DetectionResults'. |
+| Invoke-SandboxDetection.ps1 | 142 | PSAvoidGlobalVars | Found global variable 'global:DetectionResults'. |
+| Invoke-SandboxDetection.ps1 | 153 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 154 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 155 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 156 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 221 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 248 | PSPossibleIncorrectComparisonWithNull | $null should be on the left side of equality comparisons. |
+| Invoke-SandboxDetection.ps1 | 374 | PSAvoidUsingWMICmdlet | File 'Invoke-SandboxDetection.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the sa... |
+| Invoke-SandboxDetection.ps1 | 430 | PSAvoidGlobalVars | Found global variable 'global:DetectionResults'. |
 | Invoke-TokenManipulation.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Invoke-TokenManipulation.ps1' |
 | Invoke-TokenManipulation.ps1 | 78 | PSAvoidUsingWriteHost | File 'Invoke-TokenManipulation.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, d... |
 | Invoke-TokenManipulation.ps1 | 92 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Traces' uses an unapproved verb. |
@@ -159,19 +173,6 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Scan-Own-Ports.ps1 | 113 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 114 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 116 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
-| ScriptTemplate.ps1 | 27 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
-| ScriptTemplate.ps1 | 27 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
-| ScriptTemplate.ps1 | 28 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
-| ScriptTemplate.ps1 | 28 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
-| ScriptTemplate.ps1 | 30 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
-| ScriptTemplate.ps1 | 37 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
-| ScriptTemplate.ps1 | 41 | PSAvoidUsingWriteHost | File 'ScriptTemplate.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
-| ScriptTemplate.ps1 | 50 | PSUseApprovedVerbs | The cmdlet 'Abort-IfNotAdmin' uses an unapproved verb. |
-| ScriptTemplate.ps1 | 73 | PSUseDeclaredVarsMoreThanAssignments | The variable 'res' is assigned but never used. |
-| ScriptTemplate.ps1 | 77 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Password' has verb that could change system state. Therefore, the function has to support 'ShouldProcess'. |
-| ScriptTemplate.ps1 | 83 | PSUseDeclaredVarsMoreThanAssignments | The variable 'res' is assigned but never used. |
-| ScriptTemplate.ps1 | 87 | PSUseApprovedVerbs | The cmdlet 'Check-Password' uses an unapproved verb. |
-| ScriptTemplate.ps1 | 107 | PSUseApprovedVerbs | The cmdlet 'Flash-CapsLock' uses an unapproved verb. |
 | Setup-LocalWebServer.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Setup-LocalWebServer.ps1' |
 | Setup-LocalWebServer.ps1 | 61 | PSReviewUnusedParameter | The parameter 'TemplateUrl' has been declared but not used. |
 | Setup-LocalWebServer.ps1 | 77 | PSUseApprovedVerbs | The cmdlet 'Download-Template' uses an unapproved verb. |
@@ -179,8 +180,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Setup-LocalWebServer.ps1 | 108 | PSUseApprovedVerbs | The cmdlet 'Replace-Variables-In-Files' uses an unapproved verb. |
 | Setup-LocalWebServer.ps1 | 108 | PSUseSingularNouns | The cmdlet 'Replace-Variables-In-Files' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 109 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 119 | PSUseSingularNouns | The cmdlet 'Patch-Hosts' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 119 | PSUseApprovedVerbs | The cmdlet 'Patch-Hosts' uses an unapproved verb. |
+| Setup-LocalWebServer.ps1 | 119 | PSUseSingularNouns | The cmdlet 'Patch-Hosts' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 121 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | Setup-LocalWebServer.ps1 | 127 | PSUseSingularNouns | The cmdlet 'Restore-Hosts' uses a plural noun. A singular noun should be used instead. |
 | Setup-LocalWebServer.ps1 | 129 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
@@ -200,8 +201,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
 | User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
 | User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
-| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
+| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
 | User-Credential.ps1 | 88 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
 | User-Credential.ps1 | 101 | PSAvoidUsingWriteHost | File 'User-Credential.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not w... |
@@ -237,6 +238,9 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-BypassUAC.ps1 | 167 | PSAvoidUsingPositionalParameters | Cmdlet 'Write-Log' has positional parameter. Please use named parameters instead of positional parameters when callin... |
 | Invoke-BypassUAC.ps1 | 171 | PSAvoidUsingPositionalParameters | Cmdlet 'Write-Log' has positional parameter. Please use named parameters instead of positional parameters when callin... |
 | Invoke-Keylogger.ps1 | 50 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
+| Invoke-SandboxDetection.ps1 | 318 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
+| Invoke-SandboxDetection.ps1 | 430 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
+| Invoke-SandboxDetection.ps1 | 432 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
 | User-Credential.ps1 | 170 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
 | User-Credential.ps1 | 173 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
 | User-Credential.ps1 | 177 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
