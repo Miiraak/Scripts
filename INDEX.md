@@ -33,7 +33,9 @@ PowerShell
 ├── DefenseEvasion
 │   └── ProcessManipulation
 │       ├── Invoke-SandboxDetection.md
-│       └── Invoke-SandboxDetection.ps1
+│       ├── Invoke-SandboxDetection.ps1
+│       ├── Restart-ServiceOnCrash.md
+│       └── Restart-ServiceOnCrash.ps1
 ├── Discovery
 │   ├── Local
 │   │   ├── Get-BIOSInfo.md
@@ -78,7 +80,7 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-20 directories, 42 files
+20 directories, 44 files
 ```
 
 ### Licences
