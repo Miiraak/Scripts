@@ -58,7 +58,7 @@ jobs:
       - name: Post analysis report as PR comment
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.AWSR }}
           script: |
             const report = `${{ steps.analyze.outputs.report }}`;
             const pr = context.payload.pull_request.number;
