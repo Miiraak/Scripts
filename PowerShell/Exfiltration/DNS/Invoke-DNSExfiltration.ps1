@@ -96,7 +96,7 @@ function ClearTraces {
     $patterns = @("*.log", "*.txt", "*.tmp", "*Invoke-DNSExfiltration*.log")
     foreach ($pattern in $patterns) {
         Get-ChildItem -Path (Get-Location) -Filter $pattern -ErrorAction SilentlyContinue | ForEach-Object {
-            try { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } 
+            try { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue }
             catch {
                 WriteStatus "Failed to remove $_.FullName: $_" "ERROR"
             }
