@@ -1,4 +1,4 @@
-########################################################################################
+﻿########################################################################################
 #                                                                                      |
 #                 ███▄ ▄███▓ ██▓ ██▓ ██▀███   ▄▄▄      ▄▄▄       ██ ▄█▀                |
 #                ▓██▒▀█▀ ██▒▓██▒▓██▒▓██ ▒ ██▒▒████▄   ▒████▄     ██▄█▒                 |
@@ -88,21 +88,24 @@ function Write-Status {
         "EXFIL"   {"Cyan"}
         default   {"Gray"}
     }
-    Write-Host "[$lvl] $stamp :: $msg" -ForegroundColor $color
+    Write-Output "[$lvl] $stamp :: $msg" -ForegroundColor $color
 }
 
-function Cleanup-Traces {
+function Clear-Traces {
     Write-Status "Cleaning DNS exfiltration traces..." "STEP"
     $patterns = @("*.log", "*.txt", "*.tmp", "*Invoke-DNSExfiltration*.log")
     foreach ($pattern in $patterns) {
         Get-ChildItem -Path (Get-Location) -Filter $pattern -ErrorAction SilentlyContinue | ForEach-Object {
-            try { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } catch {}
+            try { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } 
+            catch {
+                Write-Status "Failed to remove $_.FullName: $_" "ERROR"
+            }
         }
     }
     Write-Status "Cleanup finished." "SUCCESS"
     exit 0
 }
-if ($Cleanup) { Cleanup-Traces }
+if ($Cleanup) { Clear-Traces }
 
 function Get-DigPath {
     # Look for dig.exe in the script directory
