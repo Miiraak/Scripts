@@ -159,7 +159,7 @@ try {
 foreach ($hw in $Indicators | Where-Object {$_.Type -eq "Hardware"}) {
     foreach ($indicator in $hw.Value) {
         if ($bios -like "*$indicator*" -or $manufacturer -like "*$indicator*" -or $model -like "*$indicator*") {
-            Add-Detection "Hardware" $indicator $hw.Weight "BIOS/Manufacturer/Model"
+            Add-Detection -Type "Hardware" -Indicator $indicator -Weight $hw.Weight -Details "BIOS/Manufacturer/Model"
             Write-Log "Hardware: $indicator" "STEP"
         }
     }
@@ -167,7 +167,7 @@ foreach ($hw in $Indicators | Where-Object {$_.Type -eq "Hardware"}) {
 foreach ($bb in $Indicators | Where-Object {$_.Type -eq "Baseboard"}) {
     foreach ($indicator in $bb.Value) {
         if ($baseboard -like "*$indicator*") {
-            Add-Detection "Baseboard" $indicator $bb.Weight "Baseboard"
+            Add-Detection -Type "Baseboard" -Indicator $indicator -Weight $bb.Weight -Details "Baseboard"
             Write-Log "Baseboard: $indicator" "STEP"
         }
     }
@@ -175,7 +175,7 @@ foreach ($bb in $Indicators | Where-Object {$_.Type -eq "Baseboard"}) {
 foreach ($biosind in $Indicators | Where-Object {$_.Type -eq "BIOS"}) {
     foreach ($indicator in $biosind.Value) {
         if ($bios -like "*$indicator*") {
-            Add-Detection "BIOS" $indicator $biosind.Weight "BIOS"
+            Add-Detection -Type "BIOS" -Indicator $indicator -Weight $biosind.Weight -Details "BIOS"
             Write-Log "BIOS: $indicator" "STEP"
         }
     }
@@ -184,7 +184,7 @@ foreach ($biosind in $Indicators | Where-Object {$_.Type -eq "BIOS"}) {
 foreach ($svcInd in $Indicators | Where-Object {$_.Type -eq "Service"}) {
     foreach ($svc in $svcInd.Value) {
         if (Get-Service -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "*$svc*" }) {
-            Add-Detection "Service" $svc $svcInd.Weight "Service"
+            Add-Detection -Type "Service" -Indicator $svc -Weight $svcInd.Weight -Details "Service"
             Write-Log "Service: $svc" "STEP"
         }
     }
@@ -193,7 +193,7 @@ foreach ($svcInd in $Indicators | Where-Object {$_.Type -eq "Service"}) {
 foreach ($procInd in $Indicators | Where-Object {$_.Type -eq "Process"}) {
     foreach ($procName in $procInd.Value) {
         if (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like "*$($procName -replace '.exe$','')*" }) {
-            Add-Detection "Process" $procName $procInd.Weight "Process"
+            Add-Detection -Type "Process" -Indicator $procName -Weight $procInd.Weight -Details "Process"
             Write-Log "Process: $procName" "STEP"
         }
     }
@@ -202,7 +202,7 @@ foreach ($procInd in $Indicators | Where-Object {$_.Type -eq "Process"}) {
 foreach ($regInd in $Indicators | Where-Object {$_.Type -eq "Registry"}) {
     foreach ($regKey in $regInd.Value) {
         if (Test-Path $regKey) {
-            Add-Detection "Registry" $regKey $regInd.Weight "Registry"
+            Add-Detection -Type "Registry" -Indicator $regKey -Weight $regInd.Weight -Details "Registry"
             Write-Log "Registry: $regKey" "STEP"
         }
     }
@@ -211,7 +211,7 @@ foreach ($regInd in $Indicators | Where-Object {$_.Type -eq "Registry"}) {
 foreach ($fileInd in $Indicators | Where-Object {$_.Type -eq "File"}) {
     foreach ($filePath in $fileInd.Value) {
         if (Test-Path $filePath) {
-            Add-Detection "File" $filePath $fileInd.Weight "File"
+            Add-Detection -Type "File" -Indicator $filePath -Weight $fileInd.Weight -Details "File"
             Write-Log "File: $filePath" "STEP"
         }
     }
@@ -223,19 +223,21 @@ try {
         foreach ($adapter in $adapters) {
             foreach ($macPrefix in $macInd.Value) {
                 if ($adapter.MACAddress -like "$macPrefix*") {
-                    Add-Detection "MAC" $adapter.MACAddress $macInd.Weight "Network"
+                    Add-Detection -Type "MAC" -Indicator $adapter.MACAddress -Weight $macInd.Weight -Details "Network"
                     Write-Log "MAC: $($adapter.MACAddress)" "STEP"
                 }
             }
         }
     }
-} catch {}
+} catch {
+    Write-Log "Failed to retrieve network adapters: $_" "ERROR"
+}
 
 $user = $env:USERNAME
 foreach ($userInd in $Indicators | Where-Object {$_.Type -eq "User"}) {
     foreach ($userTest in $userInd.Value) {
         if ($user -match $userTest) {
-            Add-Detection "User" $user $userInd.Weight "Username"
+            Add-Detection -Type "User" -Indicator $user -Weight $userInd.Weight -Details "Username"
             Write-Log "User: $user" "STEP"
         }
     }
@@ -244,7 +246,7 @@ foreach ($userInd in $Indicators | Where-Object {$_.Type -eq "User"}) {
 foreach ($envInd in $Indicators | Where-Object {$_.Type -eq "Env"}) {
     foreach ($envTest in $envInd.Value) {
         if ($null -ne $env -and ![string]::IsNullOrEmpty($envTest) -and ($env.ContainsKey($envTest) -and $env[$envTest] -ne $null -and $env[$envTest] -ne "")) {
-            Add-Detection "Env" $envTest $envInd.Weight "Environment Variable"
+            Add-Detection -Type "Env" -Indicator $envTest -Weight $envInd.Weight -Details "Environment Variable"
             Write-Log "Env: $envTest" "STEP"
         }
     }
@@ -256,7 +258,7 @@ $stop = Get-Date
 $delta = ($stop - $start).TotalSeconds
 if ($delta -lt ($SleepTime * 0.7)) {
     foreach ($timInd in $Indicators | Where-Object {$_.Type -eq "Timing"}) {
-        Add-Detection "Timing" $timInd.Value[0] $timInd.Weight "Sleep anomaly"
+        Add-Detection -Type "Timing" -Indicator $timInd.Value[0] -Weight $timInd.Weight -Details "Sleep anomaly"
         Write-Log "Timing anomaly detected (possible sandbox)" "STEP"
     }
 }
@@ -271,7 +273,7 @@ public class DebugCheck {
 "@
 if ([DebugCheck]::IsDebuggerPresent()) {
     foreach ($dbgInd in $Indicators | Where-Object {$_.Type -eq "Debugger"}) {
-        Add-Detection "Debugger" $dbgInd.Value[0] $dbgInd.Weight "Debugger"
+        Add-Detection -Type "Debugger" -Indicator $dbgInd.Value[0] -Weight $dbgInd.Weight -Details "Debugger"
         Write-Log "Debugger detected (IsDebuggerPresent)" "STEP"
     }
 }
@@ -283,12 +285,14 @@ try {
     foreach ($scrInd in $Indicators | Where-Object {$_.Type -eq "ScreenSize"}) {
         foreach ($sz in $scrInd.Value) {
             if ($sizeStr -eq $sz) {
-                Add-Detection "ScreenSize" $sizeStr $scrInd.Weight "Screen size"
+                Add-Detection -Type "ScreenSize" -Indicator $sizeStr -Weight $scrInd.Weight -Details "Screen size"
                 Write-Log "ScreenSize: $sizeStr" "STEP"
             }
         }
     }
-} catch {}
+} catch {
+    Write-Log "Failed to retrieve screen size: $_" "ERROR"
+}
 
 try {
     Add-Type -AssemblyName System.Windows.Forms
@@ -297,11 +301,13 @@ try {
     $mouseMove2 = [System.Windows.Forms.Cursor]::Position
     if ($mouseMove -eq $mouseMove2) {
         foreach ($mouseInd in $Indicators | Where-Object {$_.Type -eq "MouseActivity"}) {
-            Add-Detection "MouseActivity" $mouseInd.Value[0] $mouseInd.Weight "Mouse"
+            Add-Detection -Type "MouseActivity" -Indicator $mouseInd.Value[0] -Weight $mouseInd.Weight -Details "Mouse"
             Write-Log "Low mouse activity detected" "WARN"
         }
     }
-} catch {}
+} catch {
+    Write-Log "Failed to check mouse activity: $_" "ERROR"
+}
 
 $psLogPaths = @(
     "${env:SystemRoot}\System32\WindowsPowerShell\v1.0\powershell.exe",
@@ -311,7 +317,7 @@ foreach ($psPath in $psLogPaths) {
     if (Test-Path $psPath) {
         if ((Get-Content $psPath -ErrorAction SilentlyContinue | Select-String "Log") -or 
             (Get-Content $psPath -ErrorAction SilentlyContinue | Select-String "Monitor")) {
-            Add-Detection "Monitoring" "PowerShellLog" 3 "PowerShell binary contains suspicious strings"
+            Add-Detection -Type "Monitoring" -Indicator "PowerShellLog" -Weight 3 -Details "PowerShell binary contains suspicious strings"
             Write-Log "PowerShell monitoring detected" "WARN"
         }
     }
@@ -320,7 +326,7 @@ foreach ($psPath in $psLogPaths) {
 foreach ($toolInd in $Indicators | Where-Object {$_.Type -eq "AnalysisTool"}) {
     foreach ($procName in $toolInd.Value) {
         if (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like "*$($procName -replace '.exe$','')*" }) {
-            Add-Detection "AnalysisTool" $procName $toolInd.Weight "Analysis Tool Running"
+            Add-Detection -Type "AnalysisTool" -Indicator $procName -Weight $toolInd.Weight -Details "Analysis Tool Running"
             Write-Log "AnalysisTool: $procName" "WARN"
         }
     }
