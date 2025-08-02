@@ -91,8 +91,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-BypassUAC.ps1 | 82 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 83 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 93 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Registry' uses an unapproved verb. |
-| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 106 | PSUseApprovedVerbs | The cmdlet 'Full-CleanTraces' uses an unapproved verb. |
+| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 112 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 114 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 117 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
@@ -173,43 +173,19 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Scan-Own-Ports.ps1 | 113 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 114 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Scan-Own-Ports.ps1 | 116 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
-| Setup-LocalWebServer.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Setup-LocalWebServer.ps1' |
-| Setup-LocalWebServer.ps1 | 61 | PSReviewUnusedParameter | The parameter 'TemplateUrl' has been declared but not used. |
-| Setup-LocalWebServer.ps1 | 77 | PSUseApprovedVerbs | The cmdlet 'Download-Template' uses an unapproved verb. |
-| Setup-LocalWebServer.ps1 | 78 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 108 | PSUseSingularNouns | The cmdlet 'Replace-Variables-In-Files' uses a plural noun. A singular noun should be used instead. |
-| Setup-LocalWebServer.ps1 | 108 | PSUseApprovedVerbs | The cmdlet 'Replace-Variables-In-Files' uses an unapproved verb. |
-| Setup-LocalWebServer.ps1 | 109 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 119 | PSUseApprovedVerbs | The cmdlet 'Patch-Hosts' uses an unapproved verb. |
-| Setup-LocalWebServer.ps1 | 119 | PSUseSingularNouns | The cmdlet 'Patch-Hosts' uses a plural noun. A singular noun should be used instead. |
-| Setup-LocalWebServer.ps1 | 121 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 127 | PSUseSingularNouns | The cmdlet 'Restore-Hosts' uses a plural noun. A singular noun should be used instead. |
-| Setup-LocalWebServer.ps1 | 129 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 138 | PSUseShouldProcessForStateChangingFunctions | Function 'Start-PythonServer' has verb that could change system state. Therefore, the function has to support 'Should... |
-| Setup-LocalWebServer.ps1 | 139 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 144 | PSAvoidAssignmentToAutomaticVariable | The Variable 'Args' is an automatic variable that is built into PowerShell, assigning to it might have undesired side... |
-| Setup-LocalWebServer.ps1 | 147 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 155 | PSUseShouldProcessForStateChangingFunctions | Function 'Stop-PythonServer' has verb that could change system state. Therefore, the function has to support 'ShouldP... |
-| Setup-LocalWebServer.ps1 | 156 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 159 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 161 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 164 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 186 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 194 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 195 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
-| Setup-LocalWebServer.ps1 | 196 | PSAvoidUsingWriteHost | File 'Setup-LocalWebServer.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
+| Setup-LocalWebServer.ps1 | 142 | PSAvoidAssignmentToAutomaticVariable | The Variable 'Args' is an automatic variable that is built into PowerShell, assigning to it might have undesired side... |
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
 | User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
-| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
+| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
 | User-Credential.ps1 | 88 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
 | User-Credential.ps1 | 101 | PSAvoidUsingWriteHost | File 'User-Credential.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not w... |
 | User-Credential.ps1 | 105 | PSUseApprovedVerbs | The cmdlet 'Abort-IfNotAdmin' uses an unapproved verb. |
 | User-Credential.ps1 | 113 | PSUseApprovedVerbs | The cmdlet 'Download-ExternalBinary' uses an unapproved verb. |
-| User-Credential.ps1 | 128 | PSUseApprovedVerbs | The cmdlet 'Ensure-ExternalBinaries' uses an unapproved verb. |
 | User-Credential.ps1 | 128 | PSUseSingularNouns | The cmdlet 'Ensure-ExternalBinaries' uses a plural noun. A singular noun should be used instead. |
+| User-Credential.ps1 | 128 | PSUseApprovedVerbs | The cmdlet 'Ensure-ExternalBinaries' uses an unapproved verb. |
 | User-Credential.ps1 | 201 | PSPossibleIncorrectComparisonWithNull | $null should be on the left side of equality comparisons. |
 | User-Credential.ps1 | 212 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | User-Credential.ps1 | 324 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Password' has verb that could change system state. Therefore, the function has to support 'ShouldProcess'. |
