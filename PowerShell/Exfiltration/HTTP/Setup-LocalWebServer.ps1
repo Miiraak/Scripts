@@ -1,4 +1,4 @@
-########################################################################################
+﻿########################################################################################
 #                                                                                      |
 #                 ███▄ ▄███▓ ██▓ ██▓ ██▀███   ▄▄▄      ▄▄▄       ██ ▄█▀                |
 #                ▓██▒▀█▀ ██▒▓██▒▓██▒▓██ ▒ ██▒▒████▄   ▒████▄     ██▄█▒                 |
@@ -59,14 +59,13 @@ param (
     [Parameter(Mandatory=$true)][string]$TLD,
     [int]$Port = 8080,
     [string]$TemplateUrl = "https://github.com/Miiraak/Scripts/raw/master/Tools/html.zip",
-    [string]$TemplateFolder = "html",
     [switch]$NoBrowser,
     [switch]$StopServer
 )
 
 # ---------------[Variables]--------------- #
 $ScriptDir      = Split-Path -Parent $MyInvocation.MyCommand.Path
-$TemplatePath   = Join-Path $ScriptDir $TemplateFolder
+$TemplatePath   = Join-Path $ScriptDir "html"
 $ServerAddress  = "$Domain.$TLD"
 $PythonExe      = "python"
 $HostsPath      = "$env:SystemRoot\System32\drivers\etc\hosts"
