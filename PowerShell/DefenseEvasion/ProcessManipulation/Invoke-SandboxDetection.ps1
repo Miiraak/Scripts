@@ -421,7 +421,7 @@ function Show-SandboxSummary {
     }
 }
 
-Show-SandboxSummary $global:DetectionResults   
+Show-SandboxSummary $global:DetectionResults     
 
 # -------------- [End] -------------- #
 exit 0
