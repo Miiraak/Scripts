@@ -58,6 +58,9 @@ PowerShell
 │       ├── Logoff-IdleSessions.md
 │       └── Logoff-IdleSessions.ps1
 ├── Exfiltration
+│   ├── DNS
+│   │   ├── Invoke-DNSExfiltration.md
+│   │   └── Invoke-DNSExfiltration.ps1
 │   └── HTTP
 │       ├── Setup-LocalWebServer.md
 │       └── Setup-LocalWebServer.ps1
@@ -80,7 +83,7 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-20 directories, 44 files
+21 directories, 46 files
 ```
 
 ### Licences
