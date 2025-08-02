@@ -30,7 +30,6 @@
 | StopServer     | switch | No        | Stops server, restores hosts file, and exits               |
 
 ## Usage
-
 ### Start the Web Server
 ```powershell
 .\Setup-LocalWebServer.ps1 -Domain "mytestsite" -TLD "local"
@@ -52,6 +51,7 @@
 3. **Start Server:** Runs Python HTTP server in background.
 4. **Browser Launch:** Opens site unless `-NoBrowser` specified.
 5. **Stop Operation:** Kills server and restores hosts file when `-StopServer` used.
+6. **Cleanup:** Removes temporary files after stopping the server.
 
 ## Output
 - Website available at `http://yourdomain.tld:port/`
