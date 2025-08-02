@@ -45,11 +45,20 @@ jobs:
           foreach ($file in $files) {
             if (Test-Path $file) {
               $results = Invoke-ScriptAnalyzer -Path $file | ForEach-Object {
+                $sevString = if ($_.Severity -eq 0) {
+                  'Info'
+                } elseif ($_.Severity -eq 1) {
+                  'Warning'
+                } elseif ($_.Severity -eq 2) {
+                  'Error'
+                } else {
+                  "$($_.Severity)"
+                }
                 [PSCustomObject]@{
                   ScriptName = $_.ScriptName
                   Line = $_.Line
                   RuleName = $_.RuleName
-                  Severity = switch ($_.Severity) { 0 {'Info'}; 1 {'Warning'}; 2 {'Error'}; default { $_.Severity } }
+                  Severity = $sevString
                   Message = $_.Message
                 }
               }
