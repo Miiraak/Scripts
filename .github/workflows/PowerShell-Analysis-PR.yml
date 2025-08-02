@@ -41,6 +41,7 @@ jobs:
         run: |
           $files = '${{ steps.ps1_files.outputs.files }}'.Split(';', [System.StringSplitOptions]::RemoveEmptyEntries)
           $allResults = @()
+          $errorCount = 0
           foreach ($file in $files) {
             if (Test-Path $file) {
               $results = Invoke-ScriptAnalyzer -Path $file | ForEach-Object {
@@ -53,6 +54,7 @@ jobs:
                 }
               }
               $allResults += $results
+              $errorCount += ($results | Where-Object Severity -eq 'Error').Count
             }
           }
           $md = @()
@@ -77,6 +79,7 @@ jobs:
           echo "psa_md<<EOF" >> $env:GITHUB_OUTPUT
           echo "$mdString" >> $env:GITHUB_OUTPUT
           echo "EOF" >> $env:GITHUB_OUTPUT
+          echo "error_count=$errorCount" >> $env:GITHUB_OUTPUT
 
       - name: Post PSScriptAnalyzer Markdown report to PR
         if: steps.ps1_files.outputs.files != ''
@@ -92,3 +95,9 @@ jobs:
               issue_number: pr,
               body: report
             });
+
+      - name: Fail if errors detected by PSScriptAnalyzer
+        if: steps.ps1_files.outputs.files != '' && steps.psa_report.outputs.error_count != '0'
+        run: |
+          echo "PSScriptAnalyzer found ${{ steps.psa_report.outputs.error_count }} error(s) in .ps1 files."
+          exit 1
