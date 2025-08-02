@@ -11,7 +11,7 @@
 #                       ░    ░   ░     ░           ░  ░     ░  ░░  ░                   |
 #                                                                                      |
 #     Title        : Setup-LocalWebServer.ps1                                          |
-#     Link         : https://github.com/Miiraak/Scripts/tree/master/Exfiltration/HTTP/ |
+#     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/Exfiltration/HTTP/ |
 #     Version      : 2.5                                                               |
 #     Category     : exfiltration/http                                                 |
 #     Target       : Windows 10/11                                                     |
