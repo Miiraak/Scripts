@@ -1,0 +1,70 @@
+name: Analyze PowerShell (.ps1) files in PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  analyze-ps1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gh
+
+      - name: List added or modified .ps1 files in PR
+        id: ps1_files
+        run: |
+          files=$(gh pr view ${{ github.event.pull_request.number }} --json files --jq '.files[].path' | grep '\.ps1$' || true)
+          echo "files=$files" >> $GITHUB_OUTPUT
+
+      - name: Exit if no .ps1 files found in PR
+        if: steps.ps1_files.outputs.files == ''
+        run: |
+          echo "No .ps1 files found in this PR, exiting workflow."
+          exit 0
+
+      - name: Install PowerShell & PSScriptAnalyzer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget apt-transport-https software-properties-common
+          wget -q "https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb"
+          sudo dpkg -i packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo apt-get install -y powershell
+          pwsh -Command "Install-Module -Name PSScriptAnalyzer -Force -Scope CurrentUser"
+
+      - name: Analyze .ps1 files with PSScriptAnalyzer
+        id: analyze
+        run: |
+          result=""
+          for file in ${{ steps.ps1_files.outputs.files }}; do
+            analysis=$(pwsh -Command "Import-Module PSScriptAnalyzer; Invoke-ScriptAnalyzer -Path '$file' | ConvertTo-Json -Depth 5")
+            result="$result
+          #### Results for \`$file\`
+          \`\`\`json
+          $analysis
+          \`\`\`"
+          done
+          # Prepare nicely formatted summary
+          echo "report<<EOF" >> $GITHUB_OUTPUT
+          echo "$result" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post analysis report as PR comment
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const report = `${{ steps.analyze.outputs.report }}`;
+            const pr = context.payload.pull_request.number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr,
+              body: `## PSScriptAnalyzer Report for .ps1 files in this PR\n${report}`
+            });
