@@ -91,8 +91,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | Invoke-BypassUAC.ps1 | 82 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 83 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 93 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Registry' uses an unapproved verb. |
-| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 106 | PSUseApprovedVerbs | The cmdlet 'Full-CleanTraces' uses an unapproved verb. |
+| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 112 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 114 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 117 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
