@@ -4,8 +4,6 @@ on:
   pull_request:
     types: [closed]
     branches: [master]
-  schedule:
-    - cron: '0 8 * * *'  # Tous les jours à 8h UTC
   workflow_dispatch:
     inputs:
       dry_run:
