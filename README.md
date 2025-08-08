@@ -11,26 +11,26 @@ _We truly appreciate every ⭐ and contributions, thanks for helping this projec
 **Scripts** is a meticulously curated repository featuring categorized scripts written in PowerShell, Bash, C#, C, and other languages.  
 This collection is designed to empower security professionals, penetration testers, red and blue teamers, and learners with practical, real-world resources for security experimentation, research, and skill development. 
 
-Inside, you'll find proof-of-concepts (PoCs), advanced techniques, and utilities that cover offensive operations, defensive strategies, and analytical processes.
+Inside, you'll find proof-of-concepts (PoCs), basics scripts, advanced techniques, and utilities that cover offensive operations, defensive strategies, and analytical processes.
 
-- **Comprehensive Coverage:** Easily discover scripts for a wide range of security scenarios from automation and monitoring to detection, forensics, and stealth techniques.
+- **Comprehensive Coverage:** Easily discover scripts for a wide range of scenarios.
 - **Organized for Efficiency:** Categories are structured by purpose, complexity, and technique, enabling fast access to the right tools for your needs.
 - **Practical and Educational:** Each script is documented to support learning, with real-world applications and clear, actionable examples.
 
 > <div style="border:1px solid #4fa3ff; background-color:#435f74ff; border-radius:6px; padding:8px;">
 > <strong>Who Should Use This Repository?</strong><br>
-> Security professionals, penetration testers, cyber defense enthusiasts, students, and lifelong learners.
+> IT, Security professionals, penetration testers, cyber defense enthusiasts, students, and lifelong learners.
 > </div>
 
 ---
 
 ## Features
 - **Broad Language Support:** Find scripts in PowerShell, Bash, C#, C, and more, enabling use across multiple platforms and environments.
-- **Intuitive Categorization:** Scripts are systematically grouped by security domain, complexity, and technique, making navigation straightforward and efficient.
-- **Real-World Security Techniques:** Experiment with PoCs, automation tools, and utilities for offensive, defensive, and forensic scenarios.
+- **Intuitive Categorization:** Scripts are systematically grouped by domain and technique, making navigation straightforward and efficient.
+- **Real-World Security Techniques:** Experiment with PoCs, automation tools, and utilities for offensive, defensive, forensic or everyday life scenarios.
 - **Scalable Complexity:** Whether you're beginning or advanced, the repository includes both simple utilities and sophisticated, multi-stage solutions.
-- **Learning-Focused Documentation:** Each script is thoroughly annotated with usage instructions, examples, and context to facilitate hands-on learning.
-- **Continuous Improvement:** The repository is actively maintained and updated with fresh content and new techniques to stay relevant in the evolving security landscape.
+- **Learning-Focused Documentation:** Each script is thoroughly annotated with usage instructions, examples, and context to facilitate hands-on learning or improving.
+- **Continuous Improvement:** The repository is actively maintained and updated with fresh content and new techniques to stay relevant.
 
 ---
 
