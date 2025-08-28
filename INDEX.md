@@ -86,6 +86,17 @@ PowerShell
 21 directories, 46 files
 ```
 
+### Bash
+
+```plaintext
+Bash
+└── Automation
+    ├── SearchCVE.md
+    └── SearchCVE.sh
+
+2 directories, 2 files
+```
+
 ### Licences
 
 ```plaintext
