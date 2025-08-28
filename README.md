@@ -91,7 +91,7 @@ All contributions are gladly welcome!
 Whether you’re submitting a new script, improving documentation, reporting issues, or suggesting new techniques, your input helps the project grow.
 Please refer to [`CONTRIBUTING.md`](./CONTRIBUTING.md) for the contibutions standards.
 
-If you would like to see the list of errors or warnings found in scripts requiring correction, you can take a look at [`FIXIT.md`](./FIXIT.md). 
+If you would like to see the list of errors or warnings found in scripts requiring correction, you can take a look at FIXIT files like [`FIXIT_Powershell.md`](./FIXIT_Powershell.md). 
 
 ---
 
