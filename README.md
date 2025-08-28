@@ -37,6 +37,7 @@ Inside, you'll find proof-of-concepts (PoCs), basics scripts, advanced technique
 ## Folder Structure
 ```plaintext
 [Language]/
+├── Automation/             # Any automation of action, elevation, etc...
 ├── Collection/             # Thematic script collections (Clipboard, Keylogging, etc.)
 ├── CredentialAccess/       # Credentials dumping, browser creds, tokens, WiFi
 ├── DefenseEvasion/         # AMSI bypass, in-memory execution, obfuscation
