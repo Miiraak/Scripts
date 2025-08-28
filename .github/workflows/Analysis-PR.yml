@@ -148,9 +148,9 @@ jobs:
                   # Format: file:line:col: type: message
                   f=$(echo "$line" | cut -d: -f1)
                   l=$(echo "$line" | cut -d: -f2)
-                  t=$(echo "$line" | cut -d: -f4 | xargs)
-                  m=$(echo "$line" | cut -d: -f5- | xargs)
-                  all_results+=$'| '"$f"' | '"$l"' | '"$t"' | '"$m"$'\n'
+                  t=$(echo "$line" | cut -d: -f4 | sed 's/^ *//;s/ *$//')
+                  m=$(echo "$line" | cut -d: -f5- | sed 's/^ *//;s/ *$//')
+                  all_results+=$'| '"$f"' | '"$l"' | '"$t"' | '"${m//$'\n'/ }"$'\n'
                   [ "$t" = "error" ] && error_count=$((error_count+1))
                 done <<< "$output"
               fi
