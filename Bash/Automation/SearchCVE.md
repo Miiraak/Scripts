@@ -31,7 +31,7 @@
 > The script will print Metasploit search results for each CVE, clearly separated.
 
 ## Output Example
-```
+```sh
 ========== CVE:2021-36368 ==========
 [-] No results from search
 ------------------------------
