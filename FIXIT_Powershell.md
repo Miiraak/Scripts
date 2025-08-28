@@ -1,5 +1,5 @@
 # PowerShell Script Issues Report
-_This file is generated automatically by PowerShell Analysis workflow_
+_This file is generated automatically by Script Analysis workflow_
 
 
 ### Errors
@@ -177,8 +177,8 @@ _This file is generated automatically by PowerShell Analysis workflow_
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
 | User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
 | User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
-| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
+| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
 | User-Credential.ps1 | 88 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
 | User-Credential.ps1 | 101 | PSAvoidUsingWriteHost | File 'User-Credential.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not w... |
