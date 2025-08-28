@@ -130,13 +130,12 @@ Licences
 
 ```plaintext
 Tools
-├── PowerShellTemplate.ps1
 ├── PsExec.exe
 ├── dig.exe
 ├── html.zip
 ├── mimikatz.exe
 └── nmap.zip
 
-1 directory, 6 files
+1 directory, 5 files
 ```
 
