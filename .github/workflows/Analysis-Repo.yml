@@ -116,27 +116,27 @@ jobs:
           else
             shellcheck -f json $sh_files > bash_result.json || true
 
-            cat <<'EOF' > format_bash.sh
-            #!/usr/bin/env bash
-            results=$(cat bash_result.json | jq -c '.[]')
-            echo "## ShellCheck Results"
-            echo
-            if [ -z "$results" ]; then
-              echo "No issues detected."
-              exit 0
-            fi
-            echo "| File | Line | Level | Code | Message |"
-            echo "| ---- | ---- | ----- | ---- | ------- |"
-            echo "$results" | while read -r item; do
-              file=$(echo "$item" | jq -r '.file')
-              line=$(echo "$item" | jq -r '.line')
-              level=$(echo "$item" | jq -r '.level')
-              code=$(echo "$item" | jq -r '.code')
-              msg=$(echo "$item" | jq -r '.message' | tr '\n' ' ' | sed 's/|/\\|/g')
-              [ ${#msg} -gt 120 ] && msg="${msg:0:117}..."
-              echo "| $file | $line | $level | SC$code | $msg |"
-            done
-            EOF
+          cat <<'EOF' > format_bash.sh
+          #!/usr/bin/env bash
+          results=$(cat bash_result.json | jq -c '.[]')
+          echo "## ShellCheck Results"
+          echo
+          if [ -z "$results" ]; then
+            echo "No issues detected."
+            exit 0
+          fi
+          echo "| File | Line | Level | Code | Message |"
+          echo "| ---- | ---- | ----- | ---- | ------- |"
+          echo "$results" | while read -r item; do
+            file=$(echo "$item" | jq -r '.file')
+            line=$(echo "$item" | jq -r '.line')
+            level=$(echo "$item" | jq -r '.level')
+            code=$(echo "$item" | jq -r '.code')
+            msg=$(echo "$item" | jq -r '.message' | tr '\n' ' ' | sed 's/|/\\|/g')
+            [ ${#msg} -gt 120 ] && msg="${msg:0:117}..."
+            echo "| $file | $line | $level | SC$code | $msg |"
+          done
+          EOF
 
             bash format_bash.sh > bash_result.md
           fi
