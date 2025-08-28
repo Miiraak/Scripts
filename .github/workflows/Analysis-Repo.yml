@@ -115,7 +115,7 @@ jobs:
             jq -n '[]' > bash_result.json
           else
             shellcheck -f json $sh_files > bash_result.json || true
-            # Generate Markdown
+
             cat <<'EOF' > format_bash.sh
             #!/usr/bin/env bash
             results=$(cat bash_result.json | jq -c '.[]')
@@ -137,12 +137,14 @@ jobs:
               echo "| $file | $line | $level | SC$code | $msg |"
             done
             EOF
+
             bash format_bash.sh > bash_result.md
           fi
 
           echo '====== ShellCheck Markdown Table ======'
           cat bash_result.md
           echo '======================================'
+
 
       - name: Generate FIXIT_Bash.md from analysis results
         shell: bash
