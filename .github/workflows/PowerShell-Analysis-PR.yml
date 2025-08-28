@@ -1,4 +1,4 @@
-name: PowerShell Analysis on PR
+name: Analysis on PR
 
 on:
   pull_request:
