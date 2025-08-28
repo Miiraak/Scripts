@@ -50,7 +50,7 @@ jobs:
           cat psa_result.md
           echo '============================================='
 
-      - name: Generate FIXIT.md from analysis results
+      - name: Generate FIXIT_Powershell.md from analysis results
         shell: pwsh
         run: |
           $results = Get-Content psa_result.json | ConvertFrom-Json
@@ -94,9 +94,9 @@ jobs:
           $fixit += Format-Table $categories['Warning'] "Warnings"
           $fixit += Format-Table $categories['Info'] "Info"
 
-          Set-Content -Path FIXIT.md -Value ($fixit -join "`n")
+          Set-Content -Path FIXIT_Powershell.md -Value ($fixit -join "`n")
 
-      - name: Commit and push FIXIT.md if changed
+      - name: Commit and push FIXIT_Powershell.md if changed
         env:
           GITHUB_TOKEN: ${{ secrets.AWSR }}
         run: |
@@ -105,11 +105,11 @@ jobs:
           # Utiliser la branche par défaut du repo
           BRANCH=${{ github.ref_name }}
           # Vérification du changement
-          if git diff --quiet FIXIT.md; then
-            echo "No changes to FIXIT.md."
+          if git diff --quiet FIXIT_Powershell.md; then
+            echo "No changes to FIXIT_Powershell.md."
           else
-            git add FIXIT.md
-            git commit -m "Update FIXIT.md from scheduled/dispatch PSScriptAnalyzer scan"
+            git add FIXIT_Powershell.md
+            git commit -m "Update FIXIT_Powershell.md from scheduled/dispatch PSScriptAnalyzer scan"
             git pull --rebase origin "$BRANCH"
             git push origin HEAD:"$BRANCH"
           fi
