@@ -110,3 +110,78 @@ jobs:
         run: |
           echo "PSScriptAnalyzer found ${{ steps.psa_report.outputs.error_count }} error(s) in .ps1 files."
           exit 1
+
+  analyze-bash:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Find .sh files in PR
+        id: sh_files
+        run: |
+          files=$(curl -s -H "Authorization: Bearer ${{ secrets.AWSR }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files" \
+            | jq -r '.[].filename' | grep '\.sh$' | paste -sd ';' -)
+          echo "files=$files" >> $GITHUB_OUTPUT
+
+      - name: Exit if no .sh files in PR
+        if: steps.sh_files.outputs.files == ''
+        run: echo "No .sh files found in this PR, exiting."
+
+      - name: Install ShellCheck
+        if: steps.sh_files.outputs.files != ''
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+
+      - name: Analyze .sh files with ShellCheck
+        if: steps.sh_files.outputs.files != ''
+        id: sh_report
+        run: |
+          files=$(echo "${{ steps.sh_files.outputs.files }}" | tr ';' ' ')
+          all_results=""
+          error_count=0
+          for file in $files; do
+            if [ -f "$file" ]; then
+              output=$(shellcheck -f gcc "$file" || true)
+              if [ -n "$output" ]; then
+                while IFS= read -r line; do
+                  # Format: file:line:col: type: message
+                  f=$(echo "$line" | cut -d: -f1)
+                  l=$(echo "$line" | cut -d: -f2)
+                  t=$(echo "$line" | cut -d: -f4 | xargs)
+                  m=$(echo "$line" | cut -d: -f5- | xargs)
+                  all_results+=$'| '"$f"' | '"$l"' | '"$t"' | '"$m"$'\n'
+                  [ "$t" = "error" ] && error_count=$((error_count+1))
+                done <<< "$output"
+              fi
+            fi
+          done
+          md="## ShellCheck Report for .sh files in this PR"$'\n\n'
+          if [ -z "$all_results" ]; then
+            md+="No issues detected."
+          else
+            md+="| File | Line | Type | Message |\n| ---- | ---- | ---- | ------- |\n$all_results"
+          fi
+          echo "sh_md<<EOF" >> $GITHUB_OUTPUT
+          echo "$md" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "error_count=$error_count" >> $GITHUB_OUTPUT
+
+      - name: Post ShellCheck Report
+        if: steps.sh_files.outputs.files != ''
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.AWSR }}
+          script: |
+            const report = `${{ steps.sh_report.outputs.sh_md }}`;
+            const pr = context.payload.pull_request.number;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr,
+              body: report
+            });
+
+      - name: Fail if errors detected
+        if: steps.sh_files.outputs.files != '' && steps.sh_report.outputs.error_count != '0'
+        run: exit 1
