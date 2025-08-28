@@ -2,8 +2,8 @@
 
 | Contributor | Profile | Last Commit Date | Total Commits | Last Description/Path |
 |-------------|---------|------------------|----------------|-------------------------|
-| github-actions | @unknown | 2025-08-06 08:05 | 69 | /CREDITS.md |
-| Miiraak | @unknown | 2025-08-02 14:06 | 38 | /PowerShell/Exfiltration/HTTP/Setup-LocalWebServer.ps1 |
-| Old Character | @Miiraak | 2025-08-02 14:56 | 92 | /Tools/PowerShellTemplate.ps1 |
+| Miiraak | @unknown | 2025-08-28 20:49 | 41 | /Bash/Automation/SearchCVE.md |
+| github-actions | @unknown | 2025-08-28 20:47 | 76 | /FIXIT.md |
+| Old Character | @Miiraak | 2025-08-28 20:47 | 98 | /.github/workflows/Analysis-PR.yml |
 
 <!-- This file is automatically updated by workflow. Additions will appear below. -->
