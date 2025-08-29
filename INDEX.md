@@ -46,6 +46,8 @@ PowerShell
 │   │   ├── Get-InstalledPrograms.ps1
 │   │   ├── Get-StartupItems.md
 │   │   ├── Get-StartupItems.ps1
+│   │   ├── Get-Tree.md
+│   │   ├── Get-Tree.ps1
 │   │   ├── Get-USBDevices.md
 │   │   ├── Get-USBDevices.ps1
 │   │   ├── Scan-Own-Ports.md
@@ -83,7 +85,7 @@ PowerShell
         ├── Lock-ScreenNow.md
         └── Lock-ScreenNow.ps1
 
-21 directories, 46 files
+21 directories, 48 files
 ```
 
 ### Bash
