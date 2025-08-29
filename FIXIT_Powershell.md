@@ -125,8 +125,8 @@ _This file is generated automatically by Script Analysis workflow_
 | Invoke-SandboxDetection.ps1 | 430 | PSAvoidGlobalVars | Found global variable 'global:DetectionResults'. |
 | Invoke-TokenManipulation.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Invoke-TokenManipulation.ps1' |
 | Invoke-TokenManipulation.ps1 | 78 | PSAvoidUsingWriteHost | File 'Invoke-TokenManipulation.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, d... |
-| Invoke-TokenManipulation.ps1 | 92 | PSUseSingularNouns | The cmdlet 'Cleanup-Traces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-TokenManipulation.ps1 | 92 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Traces' uses an unapproved verb. |
+| Invoke-TokenManipulation.ps1 | 92 | PSUseSingularNouns | The cmdlet 'Cleanup-Traces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-TokenManipulation.ps1 | 165 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 172 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 179 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Persistence' has verb that could change system state. Therefore, the function has to support 'ShouldPro... |
@@ -175,17 +175,17 @@ _This file is generated automatically by Script Analysis workflow_
 | Scan-Own-Ports.ps1 | 116 | PSAvoidUsingWriteHost | File 'Scan-Own-Ports.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not wo... |
 | Setup-LocalWebServer.ps1 | 142 | PSAvoidAssignmentToAutomaticVariable | The Variable 'Args' is an automatic variable that is built into PowerShell, assigning to it might have undesired side... |
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
-| User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
 | User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
-| User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
+| User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
+| User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
 | User-Credential.ps1 | 88 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
 | User-Credential.ps1 | 101 | PSAvoidUsingWriteHost | File 'User-Credential.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not w... |
 | User-Credential.ps1 | 105 | PSUseApprovedVerbs | The cmdlet 'Abort-IfNotAdmin' uses an unapproved verb. |
 | User-Credential.ps1 | 113 | PSUseApprovedVerbs | The cmdlet 'Download-ExternalBinary' uses an unapproved verb. |
-| User-Credential.ps1 | 128 | PSUseSingularNouns | The cmdlet 'Ensure-ExternalBinaries' uses a plural noun. A singular noun should be used instead. |
 | User-Credential.ps1 | 128 | PSUseApprovedVerbs | The cmdlet 'Ensure-ExternalBinaries' uses an unapproved verb. |
+| User-Credential.ps1 | 128 | PSUseSingularNouns | The cmdlet 'Ensure-ExternalBinaries' uses a plural noun. A singular noun should be used instead. |
 | User-Credential.ps1 | 201 | PSPossibleIncorrectComparisonWithNull | $null should be on the left side of equality comparisons. |
 | User-Credential.ps1 | 212 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | User-Credential.ps1 | 324 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Password' has verb that could change system state. Therefore, the function has to support 'ShouldProcess'. |
