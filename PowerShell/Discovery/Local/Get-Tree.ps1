@@ -57,7 +57,7 @@ function Show-Tree {
         } else {
             $connector = "├── "
         }
-        Write-Host "$Prefix$connector$item"
+        Write-Output "$Prefix$connector$item"
         if ($item.PSIsContainer) {
             if ($i -eq $count - 1) {
                 $newPrefix = $Prefix + "    "
@@ -76,12 +76,12 @@ function Show-Summary {
     $totalFiles = (Get-ChildItem -Path $Path -Recurse -File).Count
     $totalDirs = (Get-ChildItem -Path $Path -Recurse -Directory).Count
     $totalSize = (Get-ChildItem -Path $Path -Recurse -File | Measure-Object -Property Length -Sum).Sum
-    Write-Host ""
-    Write-Host "Total : $totalDirs dir, $totalFiles files, $totalSize bytes"
+    Write-Output ""
+    Write-Output "Total : $totalDirs dir, $totalFiles files, $totalSize bytes"
 }
 
 # ------------[Execution]------------ #
-Write-Host (Split-Path $Folder -Leaf)
+Write-Output (Split-Path $Folder -Leaf)
 Show-Tree -Path $Folder
 Show-Summary -Path $Folder
 
