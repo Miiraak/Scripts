@@ -27,11 +27,27 @@ _This file is generated automatically by Script Analysis workflow_
 | Export-WiFiPasswords.ps1 | 82 | PSAvoidUsingWriteHost | File 'Export-WiFiPasswords.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | Export-WiFiPasswords.ps1 | 87 | PSAvoidUsingWriteHost | File 'Export-WiFiPasswords.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does ... |
 | Get-BatteryStatus.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Get-BatteryStatus.ps1' |
-| Get-BatteryStatus.ps1 | 43 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
-| Get-BatteryStatus.ps1 | 51 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
 | Get-BatteryStatus.ps1 | 54 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
-| Get-BatteryStatus.ps1 | 57 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
-| Get-BatteryStatus.ps1 | 60 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 55 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 56 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 61 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 65 | PSUseApprovedVerbs | The cmdlet 'Strip-Html' uses an unapproved verb. |
+| Get-BatteryStatus.ps1 | 70 | PSUseApprovedVerbs | The cmdlet 'Parse-MWh' uses an unapproved verb. |
+| Get-BatteryStatus.ps1 | 145 | PSUseSingularNouns | The cmdlet 'Get-SessionStats' uses a plural noun. A singular noun should be used instead. |
+| Get-BatteryStatus.ps1 | 196 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 203 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 237 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 238 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 239 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 255 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 263 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 269 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 273 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 275 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 277 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 281 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 284 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
+| Get-BatteryStatus.ps1 | 285 | PSAvoidUsingWriteHost | File 'Get-BatteryStatus.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not... |
 | Get-BIOSInfo.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Get-BIOSInfo.ps1' |
 | Get-BIOSInfo.ps1 | 52 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 53 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
@@ -43,8 +59,8 @@ _This file is generated automatically by Script Analysis workflow_
 | Get-BIOSInfo.ps1 | 85 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 89 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Get-BIOSInfo.ps1 | 90 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
-| Get-BIOSInfo.ps1 | 94 | PSAvoidUsingWMICmdlet | File 'Get-BIOSInfo.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the same tasks as... |
 | Get-BIOSInfo.ps1 | 94 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
+| Get-BIOSInfo.ps1 | 94 | PSAvoidUsingWMICmdlet | File 'Get-BIOSInfo.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the same tasks as... |
 | Get-BIOSInfo.ps1 | 96 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 97 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 98 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
@@ -125,8 +141,8 @@ _This file is generated automatically by Script Analysis workflow_
 | Invoke-SandboxDetection.ps1 | 430 | PSAvoidGlobalVars | Found global variable 'global:DetectionResults'. |
 | Invoke-TokenManipulation.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'Invoke-TokenManipulation.ps1' |
 | Invoke-TokenManipulation.ps1 | 78 | PSAvoidUsingWriteHost | File 'Invoke-TokenManipulation.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, d... |
-| Invoke-TokenManipulation.ps1 | 92 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Traces' uses an unapproved verb. |
 | Invoke-TokenManipulation.ps1 | 92 | PSUseSingularNouns | The cmdlet 'Cleanup-Traces' uses a plural noun. A singular noun should be used instead. |
+| Invoke-TokenManipulation.ps1 | 92 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Traces' uses an unapproved verb. |
 | Invoke-TokenManipulation.ps1 | 165 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 172 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Invoke-TokenManipulation.ps1 | 179 | PSUseShouldProcessForStateChangingFunctions | Function 'Set-Persistence' has verb that could change system state. Therefore, the function has to support 'ShouldPro... |
@@ -177,8 +193,8 @@ _This file is generated automatically by Script Analysis workflow_
 | User-Credential.ps1 |  | PSUseBOMForUnicodeEncodedFile | Missing BOM encoding for non-ASCII encoded file 'User-Credential.ps1' |
 | User-Credential.ps1 | 62 | PSAvoidUsingPlainTextForPassword | Parameter '$NewPassword' should not use String type but either SecureString or PSCredential, otherwise it increases t... |
 | User-Credential.ps1 | 62 | PSReviewUnusedParameter | The parameter 'NewPassword' has been declared but not used. |
-| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 63 | PSAvoidUsingPlainTextForPassword | Parameter '$TestPassword' should not use String type but either SecureString or PSCredential, otherwise it increases ... |
+| User-Credential.ps1 | 63 | PSReviewUnusedParameter | The parameter 'TestPassword' has been declared but not used. |
 | User-Credential.ps1 | 65 | PSReviewUnusedParameter | The parameter 'LogPath' has been declared but not used. |
 | User-Credential.ps1 | 88 | PSAvoidOverwritingBuiltInCmdlets | 'Write-Log' is a cmdlet that is included with PowerShell (version core-6.1.0-windows) whose definition should not be ... |
 | User-Credential.ps1 | 101 | PSAvoidUsingWriteHost | File 'User-Credential.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not w... |
@@ -197,6 +213,8 @@ _This file is generated automatically by Script Analysis workflow_
 
 | File | Line | Rule | Message |
 | ---- | ---- | ---- | ------- |
+| Get-BatteryStatus.ps1 | 260 | PSAvoidUsingPositionalParameters | Cmdlet 'Write-KV' has positional parameter. Please use named parameters instead of positional parameters when calling... |
+| Get-BatteryStatus.ps1 | 261 | PSAvoidUsingPositionalParameters | Cmdlet 'Write-KV' has positional parameter. Please use named parameters instead of positional parameters when calling... |
 | Get-InstalledPrograms.ps1 | 43 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
 | Get-USBDevices.ps1 | 34 | PSAvoidTrailingWhitespace | Line has trailing whitespace |
 | Invoke-BypassUAC.ps1 | 97 | PSAvoidUsingPositionalParameters | Cmdlet 'Write-Log' has positional parameter. Please use named parameters instead of positional parameters when callin... |
