@@ -2,7 +2,7 @@
 #                                                                                      |
 #                 ███▄ ▄███▓ ██▓ ██▓ ██▀███   ▄▄▄      ▄▄▄       ██ ▄█▀                |
 #                ▓██▒▀█▀ ██▒▓██▒▓██▒▓██ ▒ ██▒▒████▄   ▒████▄     ██▄█▒                 |
-#                ▓██    ▓██░▒██▒▒██▒▓██ ░▄█ ▒▒██  ▀█▄ ▒██  ���█▄  ▓███▄░                 |
+#                ▓██    ▓██░▒██▒▒██▒▓██ ░▄█ ▒▒██  ▀█▄ ▒██  ▀█▄  ▓███▄░                 |
 #                ▒██    ▒██ ░██░░██░▒██▀▀█▄  ░██▄▄▄▄██░██▄▄▄▄██ ▓██ █▄                 |
 #                ▒██▒   ░██▒░██░░██░░██▓ ▒██▒ ▓█   ▓██▒▓█   ▓██▒▒██▒ █▄                |
 #                ░ ▒░   ░  ░░▓  ░▓  ░ ▒▓ ░▒▓░ ▒▒   ▓▒█░▒▒   ▓▒█░▒ ▒▒ ▓▒                |
@@ -12,10 +12,10 @@
 #                                                                                      |
 #     Title        : Get-BatteryStatus.ps1                                             |
 #     Link         : https://github.com/Miiraak/Scripts/tree/master/PowerShell/Utilities/Logging/   |
-#     Version      : 5.3                                                               |
+#     Version      : 5.4                                                               |
 #     Category     : utilities/logging                                                 |
 #     Target       : Windows 10/11                                                     |
-#     Description  : Battery analysis report - health, consumption & runtime estimate  |
+#     Description  : Battery analysis report - health, cycles, consumption & runtime   |
 ########################################################################################
 
 <#
@@ -25,10 +25,11 @@
 .DESCRIPTION
   - Machine identity (computer name, CPU)
   - Battery health: Design vs Current capacity, wear %
+  - Battery cycles: Cycle count (when available)
   - Usage statistics: session count + average consumption (W)
   - Runtime estimation: current battery vs new battery
-  - All data sourced from a single powercfg /batteryreport HTML file.
-    CPU name falls back to Win32_Processor if absent from the report.
+  - Most data sourced from a single powercfg /batteryreport HTML file.
+    CPU name falls back to Win32_Processor (powercfg report doesn't include CPU).
 
 .EXAMPLE
   .\Get-BatteryStatus.ps1
@@ -61,15 +62,18 @@ function Write-KV ([string]$Key, $Value, [int]$Width = 30) {
     Write-Host ("{0,-$Width}: {1}" -f $Key, $Value)
 }
 
-# Strips HTML tags and collapses whitespace from a raw cell string
-function Strip-Html ([string]$s) {
-    ($s -replace '<[^>]+>', ' ' -replace '\s+', ' ').Trim()
-}
-
 # Parses "90 005 mWh" or "67 864 mWh" -> int in mWh (removes all non-digits)
 function Parse-MWh ([string]$s) {
     $clean = $s -replace '[^\d]', ''
     if ($clean) { [int]$clean } else { $null }
+}
+
+# Safe int parser for "-" or empty
+function Parse-Int ([string]$s) {
+    if (-not $s) { return $null }
+    $clean = ($s -replace '[^\d]', '')
+    if (-not $clean) { return $null }
+    try { [int]$clean } catch { $null }
 }
 
 #endregion
@@ -103,12 +107,7 @@ function Get-BatteryReportHtml {
 #region -- Parsers ----------------------------------------------------------------
 
 function Get-MachineInfoFromHtml ([string]$Html) {
-    # COMPUTER NAME row:        <td class="label">COMPUTER NAME</td><td>APOCRYPHA</td>
-    $computer = if ($Html -match '(?is)COMPUTER\s+NAME\s*</td>\s*<td[^>]*>\s*([^<]+)') {
-        $matches[1].Trim()
-    } else { $env:COMPUTERNAME }
-
-    # SYSTEM PRODUCT NAME row -> this is the machine model, not the CPU
+    # SYSTEM PRODUCT NAME row -> machine model
     $model = if ($Html -match '(?is)SYSTEM\s+PRODUCT\s+NAME\s*</td>\s*<td[^>]*>\s*([^<]+)') {
         $matches[1].Trim()
     }
@@ -120,7 +119,7 @@ function Get-MachineInfoFromHtml ([string]$Html) {
     } catch { "N/A" }
 
     [pscustomobject]@{
-        Computer = if ($model) { $model } else { $computer }
+        Computer = if ($model) { $model } else { $env:COMPUTERNAME }
         CPU      = $cpu
     }
 }
@@ -128,9 +127,7 @@ function Get-MachineInfoFromHtml ([string]$Html) {
 function Get-CapacitiesFromHtml ([string]$Html) {
     if (-not $Html) { return $null }
 
-    # Target the "Installed batteries" table:
-    # <span class="label">DESIGN CAPACITY</span></td><td>90 005 mWh\n      </td>
-    # <span class="label">FULL CHARGE CAPACITY</span></td><td>67 864 mWh\n      </td>
+    # Installed batteries table
     $design = if ($Html -match '(?is)DESIGN\s+CAPACITY</span></td>\s*<td[^>]*>\s*([\d\s]+)\s*mWh') {
         Parse-MWh $matches[1]
     }
@@ -138,26 +135,44 @@ function Get-CapacitiesFromHtml ([string]$Html) {
         Parse-MWh $matches[1]
     }
 
-    if (-not $design -and -not $full) { return $null }
-    [pscustomobject]@{ DesignMWh = $design; FullMWh = $full }
+    # Cycle count is often "-" in HTML depending on device/firmware
+    $cycle = $null
+    if ($Html -match '(?is)CYCLE\s+COUNT</span></td>\s*<td[^>]*>\s*([^<]+)') {
+        $cycle = Parse-Int $matches[1]
+    }
+
+    if (-not $design -and -not $full -and $null -eq $cycle) { return $null }
+    [pscustomobject]@{
+        DesignMWh = $design
+        FullMWh   = $full
+        CycleCount = $cycle
+        CycleSource = if ($null -ne $cycle) { "powercfg" } else { $null }
+    }
+}
+
+function Get-CycleCountFallback {
+    # Some machines expose cycle count via WMI in root\wmi BatteryCycleCount
+    try {
+        $cc = Get-CimInstance -Namespace root\wmi -ClassName BatteryCycleCount -ErrorAction Stop |
+              Select-Object -First 1
+        if ($null -ne $cc.CycleCount) { return [int]$cc.CycleCount }
+        $null
+    }
+    catch {
+        Write-Verbose "Cycle count not available via root\\wmi BatteryCycleCount."
+        $null
+    }
 }
 
 function Get-SessionStats ([string]$Html) {
     if (-not $Html) { return $null }
 
-    # Isolate the "Battery usage" table (between the two <h2> tags that surround it)
-    # Sessions rows have class="dc" and contain:
-    #   <td class="hms">0:16:21</td>   <- duration
-    #   <td class="mw">5 376 mWh</td>  <- energy drained
-
     $watts = foreach ($row in [regex]::Matches($Html, '(?is)<tr[^>]*class="[^"]*dc[^"]*"[^>]*>(.*?)</tr>')) {
         $inner = $row.Groups[1].Value
 
-        # Duration cell: <td class="hms">h:mm:ss</td>
         $durMatch = [regex]::Match($inner, '(?is)<td[^>]*class="[^"]*hms[^"]*"[^>]*>\s*(\d+:\d{2}:\d{2})\s*</td>')
         if (-not $durMatch.Success) { continue }
 
-        # Energy cell: <td class="mw">5 376 mWh</td>
         $mwhMatch = [regex]::Match($inner, '(?is)<td[^>]*class="[^"]*mw[^"]*"[^>]*>\s*([\d\s]+)\s*mWh')
         if (-not $mwhMatch.Success) { continue }
 
@@ -206,25 +221,32 @@ if (-not $html) {
 
 $machineName = $env:COMPUTERNAME
 $machine  = Get-MachineInfoFromHtml $html
-$caps     = Get-CapacitiesFromHtml  $html
+$batt     = Get-CapacitiesFromHtml  $html
 $sessions = Get-SessionStats        $html
 
-$designWh = if ($caps -and $caps.DesignMWh) { [int][math]::Round($caps.DesignMWh / 1000) }
-$fullWh   = if ($caps -and $caps.FullMWh)   { [int][math]::Round($caps.FullMWh   / 1000) }
+$designMWh = if ($batt) { $batt.DesignMWh } else { $null }
+$fullMWh   = if ($batt) { $batt.FullMWh }   else { $null }
+
+# Cycle count:
+# - Prefer powercfg if present and numeric
+# - Fallback to root\wmi BatteryCycleCount if available
+$cycleCount = if ($batt -and $null -ne $batt.CycleCount) { $batt.CycleCount } else { Get-CycleCountFallback }
 
 $wearPct   = $null
 $healthPct = $null
-if ($designWh -and $fullWh -and $designWh -gt 0) {
-    $wearPct   = [int][math]::Max(0, [math]::Round((1 - $fullWh / $designWh) * 100))
-    $healthPct = 100 - $wearPct
+if ($designMWh -and $fullMWh -and $designMWh -gt 0) {
+    $wearPct   = [math]::Round((1 - ($fullMWh / $designMWh)) * 100, 2)
+    if ($wearPct -lt 0) { $wearPct = 0 }
+    $healthPct = [math]::Round(100 - $wearPct, 2)
 }
 
 $rtCurrent = $null
 $rtNew     = $null
 $gainMin   = $null
 if ($sessions -and $sessions.AvgWatt -gt 0) {
-    if ($fullWh)   { $rtCurrent = $fullWh   / $sessions.AvgWatt }
-    if ($designWh) { $rtNew     = $designWh / $sessions.AvgWatt }
+    # Runtime hours = (energy in Wh) / W  ; with mWh: (mWh/1000)/W
+    if ($fullMWh)   { $rtCurrent = ($fullMWh   / 1000.0) / $sessions.AvgWatt }
+    if ($designMWh) { $rtNew     = ($designMWh / 1000.0) / $sessions.AvgWatt }
     if ($rtCurrent -and $rtNew) {
         $gainMin = [int][math]::Round(($rtNew - $rtCurrent) * 60)
     }
@@ -238,14 +260,15 @@ Write-Host ""
 Write-Host "==== BATTERY ANALYSIS REPORT ====" -ForegroundColor Cyan
 Write-Host ""
 Write-KV "Report generated" (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
-Write-KV "Machine name"   $machineName
-Write-KV "Computer" $machine.Computer
-Write-KV "CPU"      $machine.CPU
+Write-KV "Machine name"     $machineName
+Write-KV "Computer"         $machine.Computer
+Write-KV "CPU"              $machine.CPU
 
 Write-Header "Battery information"
-Write-KV "Design Capacity"  $(if ($designWh)            { "$designWh Wh" }  else { "N/A" })
-Write-KV "Current Capacity" $(if ($fullWh)              { "$fullWh Wh" }    else { "N/A" })
-Write-KV "Battery Health"   $(if ($null -ne $healthPct) { "$healthPct %" }  else { "N/A" })
+Write-KV "Design Capacity"  $(if ($designMWh)           { "$designMWh mWh" } else { "N/A" })
+Write-KV "Current Capacity" $(if ($fullMWh)             { "$fullMWh mWh" }   else { "N/A" })
+Write-KV "Battery Health"   $(if ($null -ne $healthPct) { "$healthPct %" }   else { "N/A" })
+Write-KV "Cycle count"      $(if ($null -ne $cycleCount){ $cycleCount }      else { "N/A" })
 
 Write-Header "Usage statistics"
 if ($sessions) {
