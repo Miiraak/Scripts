@@ -306,6 +306,7 @@ if ($null -ne $wearPct) {
 
 Write-Host ""
 Write-Host "Tip: run with -Verbose for detailed query information." -ForegroundColor DarkGray
+Pause
 exit 0
 
 #endregion
