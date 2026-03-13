@@ -59,8 +59,8 @@ _This file is generated automatically by Script Analysis workflow_
 | Get-BIOSInfo.ps1 | 85 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 89 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Get-BIOSInfo.ps1 | 90 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
-| Get-BIOSInfo.ps1 | 94 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Get-BIOSInfo.ps1 | 94 | PSAvoidUsingWMICmdlet | File 'Get-BIOSInfo.ps1' uses WMI cmdlet. For PowerShell 3.0 and above, use CIM cmdlet which perform the same tasks as... |
+| Get-BIOSInfo.ps1 | 94 | PSAvoidUsingEmptyCatchBlock | Empty catch block is used. Please use Write-Error or throw statements in catch blocks. |
 | Get-BIOSInfo.ps1 | 96 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 97 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
 | Get-BIOSInfo.ps1 | 98 | PSAvoidUsingWriteHost | File 'Get-BIOSInfo.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not work... |
@@ -107,8 +107,8 @@ _This file is generated automatically by Script Analysis workflow_
 | Invoke-BypassUAC.ps1 | 82 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 83 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 93 | PSUseApprovedVerbs | The cmdlet 'Cleanup-Registry' uses an unapproved verb. |
-| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 106 | PSUseApprovedVerbs | The cmdlet 'Full-CleanTraces' uses an unapproved verb. |
+| Invoke-BypassUAC.ps1 | 106 | PSUseSingularNouns | The cmdlet 'Full-CleanTraces' uses a plural noun. A singular noun should be used instead. |
 | Invoke-BypassUAC.ps1 | 112 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 114 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
 | Invoke-BypassUAC.ps1 | 117 | PSAvoidUsingWriteHost | File 'Invoke-BypassUAC.ps1' uses Write-Host. Avoid using Write-Host because it might not work in all hosts, does not ... |
