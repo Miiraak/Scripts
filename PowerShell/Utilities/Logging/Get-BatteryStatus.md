@@ -1,10 +1,11 @@
 # Get-BatteryStatus.ps1
 
 ## Overview
-**Get-BatteryStatus.ps1** is a PowerShell script for Windows 10/11 that prints a **structured battery analysis report directly in the console**.
+**Get-BatteryStatus.ps1** is a PowerShell script for Windows 11 that prints a **structured battery analysis report directly in the console**.
 
 It provides a clear, technician-readable summary of battery health, real-world consumption and runtime estimates — without having to open an HTML file.  
-All data is sourced from a single **`powercfg /batteryreport`** HTML file generated temporarily at runtime.
+Data are sourced from a single **`powercfg /batteryreport`** (fallback to WMI for some cases). HTML file generated temporarily at runtime.
+It check for warranty status and end date too.
 
 ## What it shows
 
@@ -12,11 +13,13 @@ All data is sourced from a single **`powercfg /batteryreport`** HTML file genera
 - Computer name (from `$env`)
 - Computer model (from `SYSTEM PRODUCT NAME` in the powercfg report)
 - CPU name (via `Win32_Processor`)
+- Warranty state (via Get-Warranty module)
 
 ### Battery information
 - **Design capacity** *(factory/original maximum)* in **Wh**
 - **Current capacity** *(current maximum)* in **Wh**
 - **Battery health (%)** computed from Design vs Current capacity
+- **Cycle count** number of discharges/full recharges
 
 ### Usage statistics
 - Number of **analyzed discharge sessions** (parsed from the powercfg report)
@@ -31,18 +34,19 @@ All data is sourced from a single **`powercfg /batteryreport`** HTML file genera
 - Potential **runtime gain** from replacing the battery (in minutes)
 
 ## Data sources
-All data comes from a single source:
-
-| Data | Source |
+|  |  |
 |---|---|
 | Computer name | `$env:COMPUTERNAME` |
 | Computer model | `powercfg /batteryreport` HTML (`SYSTEM PRODUCT NAME`) |
+| Warranty | Powershell module `Get-Warranty` ([here](https://github.com/Miiraak/Get-Warranty))
 | Design / Current capacity | `powercfg /batteryreport` HTML (`Installed batteries` table) |
 | Discharge sessions (duration + energy) | `powercfg /batteryreport` HTML (`Battery usage` table) |
 | CPU name | `Win32_Processor` (CIM, single call — not in powercfg report) |
 | Battery presence | `System.Windows.Forms.SystemInformation.PowerStatus` |
+| Cycle count | `powercfg /batteryreport` HTML or `root\wmi BatteryCycleCount` fallback |
 
-The script generates a **temporary** HTML file in `%TEMP%`, parses the needed values, then **deletes it immediately**.
+> The script generates a **temporary** HTML file in `%TEMP%`, parses the needed values, then **deletes it immediately**. </br>
+> The module `Get-Warranty` is installed from powershell gallery. After using it, the script **uninstall it immediately** 
 
 ## Parameters
 This script does not take any custom parameters.  
@@ -59,18 +63,31 @@ Verbose mode (recommended for troubleshooting):
 .\Get-BatteryStatus.ps1 -Verbose
 ```
 
+Json output
+```powershell
+.\Get-BatteryStatus.ps1 -json
+```
+
+No warranty check
+```powershell
+.\Get-BatteryStatus.ps1 -NoWarranty
+```
+
 ## Output example
 ```text
 ==== BATTERY ANALYSIS REPORT ====
 
+Report generated              : 2026-03-24 20:03:03                                                                                            Machine name                  : RandomHP 
 Computer                      : HP EliteBook 840 G8
 CPU                           : Intel Core i5-1135G7
+Warranty                      : Active (2028-03-20)
 
 Battery information
 -------------------
 Design Capacity               : 53 Wh
 Current Capacity              : 37 Wh
 Battery Health                : 70 %
+Cycle count                   : 127
 
 Usage statistics
 ----------------
@@ -110,10 +127,11 @@ Run with `-Verbose` to confirm the report was generated, then inspect the HTML f
 This can happen if the machine has only been used on AC power recently, or if the battery report does not contain any discharge entries for the last 7 days.
 
 ## Requirements
-- Windows 10 / 11
+- Windows 11
 - PowerShell 5.1 or PowerShell 7+
 - `powercfg.exe` available (built-in on all Windows versions)
 - Administrator rights may be required for `powercfg /batteryreport`
+- Internet is required for Warranty check. 
 
 ## License
 ```text
